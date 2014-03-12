@@ -1,0 +1,24 @@
+.table-header {
+    white-space: normal !important;
+    height: 40px;
+}
+.qq-upload-list {
+    display: inline-block;
+    margin: 5px 0 0 5px;
+    list-style: none;
+}
+
+.qq-upload-button {
+    font-family: Arial;
+}
+.qq-upload-list > li > * {
+    display: none;
+}
+
+.qq-upload-list .qq-upload-file {
+    display: inline;
+}
+
+.hide {
+    display: none;
+}

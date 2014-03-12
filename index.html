@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="css/main.css"/>
+    <!--<link rel="stylesheet" href="css/fineuploader.css"/>-->
+    <link rel="stylesheet" href="js/lib/semantic/build/packaged/css/semantic.css"/>
+    <link rel="stylesheet" href="js/lib/kendo-ui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="js/lib/kendo-ui/styles/kendo.default.min.css"/>
+    <script data-main="js/config-and-run" src="js/lib/requirejs/require.js"></script>
+</head>
+<body>
+<!--first part of accordion-->
+<div class="ui fluid accordion">
+    <div class="active title">
+        <i class="dropdown icon"></i>
+        Import csv file
+    </div>
+    <div class="active content">
+        <div id="fine-uploader" class="qq-uploader">
+            <div class="ui button qq-upload-button">Select CSV file</div>
+            <div class="qq-upload-drop-area hide"></div>
+            <ul class="qq-upload-list">
+                <li>
+                    <span class="qq-upload-file"></span>
+                    <div class="hide">
+                        <span class="qq-upload-size"></span>
+                        <div class="qq-progress-bar"></div>
+                        <span class="qq-upload-spinner"></span>
+                        <span class="qq-upload-finished"></span>
+                        <a class="qq-upload-cancel" href="#">{cancelButtonText}</a>
+                        <a class="qq-upload-retry" href="#">{retryButtonText}</a>
+                        <span class="qq-upload-status-text">{statusText}</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <p><button class="import ui button">Import file</button></p>
+    </div>
+<!--END-->
+
+<!--second part of accordion-->
+    <div class="title">
+        <i class="dropdown icon"></i>
+        Input data
+    </div>
+    <div class="content">
+
+        <h2 class="ui bleak header">
+            Споживання окремих видів енергетичних матеріалів та продуктів перероблення нафти за містами і районами у 2009 році</h2>
+        <div id="input-data-13"></div>
+
+        <h2 class="ui bleak header">
+            Споживання енергетичних матеріалів та продуктів перероблення нафти за видами економічної діяльності у 2009 році</h2>
+        <div id="input-data-10"></div>
+        <p><button class="analyze ui button">Analyze</button></p>
+    </div>
+
+    <!--END-->
+
+    <!--third part of accordion-->
+    <div class="title">
+        <i class="dropdown icon"></i>
+        Results
+    </div>
+    <div class="content">
+
+        <h2 class="ui bleak header">Результат кластерізації</h2>
+        <div id="result-data"></div>
+        <p><button class="ui button">Export to CSV</button></p>
+
+        <h2 class="ui bleak header">Кількість районів у кожному кластері</h2>
+        <div id="cluster-data"></div>
+        <p><button class="ui button">Export to CSV</button></p>
+
+        <h2 class="ui bleak header">Графічне представлення</h2>
+        <div id="chart-1"></div>
+        <p><a href="#chart-1" class="ui button">Save to image</a></p>
+
+        <h2 class="ui bleak header">Статистичні інформація</h2>
+        <h3 class="ui header">Використання ресурсів: вугілля кам’яне,&nbsp;т</h3>
+        <div>
+            <div class="ui label">
+                min
+                <div class="detail">214</div>
+            </div>
+            <div class="ui label">
+                max
+                <div class="detail">214</div>
+            </div>
+            <div class="ui label">
+                середне значення
+                <div class="detail">214</div>
+            </div>
+            <div class="ui label">
+                середнеквадратичне відхілення
+                <div class="detail">214</div>
+            </div>
+            <div class="ui label">
+                дисперсія
+                <div class="detail">214</div>
+            </div>
+        </div>
+
+
+        <p><button id="print" class="ui button">Print</button></p>
+    </div>
+
+    <div class="title">
+        <i class="dropdown icon"></i>
+        Predictions
+    </div>
+    <div class="content">
+
+        <h2 class="ui bleak header">Використання паливно-енергетичних ресурсів на виробничо-експлуатаційні потреби</h2>
+        <div id="data-for-predict"></div>
+        <p><button class="analyze ui button">Predict</button></p>
+    </div>
+</div>
+<!--END-->
+
+<!--dialog-->
+<div id="print-dialog" class="ui modal small hidden">
+    <i class="close icon"></i>
+    <div class="header">
+        Print
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="grouped inline fields">
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="fruit" checked="checked">
+                        <label>Кластерізація районів</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="fruit" checked="checked">
+                        <label>Кількість регіонів</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="fruit" checked="checked">
+                        <label>Кількість міст у кожному з кластерів</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui button">OK</div>
+        <div class="ui button">Cancel</div>
+    </div>
+</div>
+
+</body>
+</html>
