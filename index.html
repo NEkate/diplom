@@ -11,8 +11,9 @@
     <script data-main="js/config-and-run" src="js/lib/requirejs/require.js"></script>
 </head>
 <body>
-<!--first part of accordion-->
+
 <div class="ui fluid accordion">
+    <!--first part of accordion-->
     <div class="active title">
         <i class="dropdown icon"></i>
         Import csv file
@@ -57,10 +58,9 @@
         <div id="input-data-10"></div>
         <p><button class="analyze ui button">Analyze</button></p>
     </div>
+<!--END-->
 
-    <!--END-->
-
-    <!--third part of accordion-->
+<!--results` part of accordion-->
     <div class="title">
         <i class="dropdown icon"></i>
         Results
@@ -108,7 +108,8 @@
         <p><button id="print" class="ui button">Print</button></p>
     </div>
 <!--END-->
-    <!--fourth part of accordion-->
+
+<!--prediction`s part of accordion-->
     <div class="title">
         <i class="dropdown icon"></i>
         Predictions
@@ -119,22 +120,30 @@
         <div id="data-for-predict"></div>
         <p><button class="analyze ui button">Predict</button></p>
 
-        <h2 class="ui bleak header">Коефіцієнти моделі:</h2>
-            <span class="ui label">β0 = </span>
-            <span class="ui label">β1 = </span>
-            <span class="ui label">β2 = </span>
+<h2 class="ui bleak header">Результати:</h2>
+<div class="ui segment">
+       <div class="ui top left attached label">Коефіцієнти моделі:</div>
+            <div>β0 = </div>
+            <div>β1 = </div>
+            <div>β2 = </div>
+</div>
+<div class="ui segment">
+       <div class="ui top left attached label">Модель залежності залежної змінної від незалежних:</div>
+       <div>Y=β0+β1*X1+β2*X2+ε</div>
+</div>
+<div class="ui segment">
+    <div class="ui top left attached label">Прогнозоване значення:</div>
+    <div>
+        Усього, тис.т умовного палива відсотків до загального обсягу (на 2010 рік)
+        <span class="ui red header">3359</span>
+    </div>
+</div>
 
-        <h2 class="ui bleak header">Модель залежності залежної змінної від незалежних:</h2>
-        <span class="ui label">Y=β0+β1*X1+β2*X2+ε</span>
 
-        <h2 class="ui bleak header">Прогнозоване значення:</h2>
-        <div class="ui label">
-            Усього, тис.т умовного палива відсотків до загального обсягу (на 2010 рік)
-            <div class="detail">3359</div>
-        </div>
     </div>
 </div>
 <!--END-->
+
 
 <!--dialog-->
 <div id="print-dialog" class="ui modal small hidden">
