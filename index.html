@@ -60,10 +60,10 @@
     </div>
 <!--END-->
 
-<!--results` part of accordion-->
+<!--clusters results` part -->
     <div class="title">
         <i class="dropdown icon"></i>
-        Results
+        Results of cluster analysis
     </div>
     <div class="content">
 
@@ -105,8 +105,32 @@
         </div>
 
 
-        <p><button id="print" class="ui button">Print</button></p>
+        <p><button class="ui button print">Print</button></p>
     </div>
+<!--END-->
+
+<!--rep results` part -->
+<div class="title">
+    <i class="dropdown icon"></i>
+    Energy potential
+    </div>
+<div class="content">
+<div class="ui segment">
+    <div class="ui bleak header">Реалізований енергетичний потенциал
+    <span class="ui red header">172.8</span></div>
+    <div class="ui ribbon label">Загальний обсяг видобутку і виробництва всіх видів енергоресурсів в регіоні, т н.е.</div>
+    <div>117.4</div>
+    <div class="ui ribbon label">Загальний обсяг споживання всіх видів енергоресурсів, т н.е.</div>
+    <div>128.9</div>
+    <div class="ui ribbon label">Фактична кількість населення в даному регіоні, чол.</div>
+    <div>1263.5</div>
+    <div class="ui ribbon label">Коефіцієнт приведення</div>
+    <div>0.43</div>
+</div>
+
+
+    <p><button class="ui button print">Print</button></p>
+</div>
 <!--END-->
 
 <!--prediction`s part of accordion-->
@@ -122,25 +146,16 @@
 
 <h2 class="ui bleak header">Результати:</h2>
 <div class="ui segment">
-       <div class="ui top left attached label">Коефіцієнти моделі:</div>
-            <div>β0 = </div>
-            <div>β1 = </div>
-            <div>β2 = </div>
+    <div class="ui bleak header">Усього, тис.т умовного палива відсотків до загального обсягу (на 2010 рік)
+    <span class="ui red header">3359</span></div>
+    <div class="ui ribbon label">Коефіцієнти моделі:</div>
+    <div>β0 = 0.43</div>
+    <div>β1 = 0.2</div>
+    <div>β2 = 0.74</div>
+    <div class="ui ribbon label">Модель залежності залежної змінної від незалежних:</div>
+    <div>Y=0.43+0.2X1+0.74X2+ε</div>
 </div>
-<div class="ui segment">
-       <div class="ui top left attached label">Модель залежності залежної змінної від незалежних:</div>
-       <div>Y=β0+β1*X1+β2*X2+ε</div>
-</div>
-<div class="ui segment">
-    <div class="ui top left attached label">Прогнозоване значення:</div>
-    <div>
-        Усього, тис.т умовного палива відсотків до загального обсягу (на 2010 рік)
-        <span class="ui red header">3359</span>
-    </div>
-</div>
-
-
-    </div>
+ </div>
 </div>
 <!--END-->
 
