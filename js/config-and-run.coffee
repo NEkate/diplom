@@ -7,6 +7,7 @@ require.config
         highcharts: 'lib/highcharts.com/js/highcharts.src'
         "highcharts-export": 'lib/highcharts.com/js/modules/exporting.src'
         fineuploader: 'lib/fineuploader'
+        'ajax-form': 'lib/jquery.form.min'
 
     shim:
         jquery:
@@ -24,6 +25,9 @@ require.config
             deps: ['jquery', 'highcharts']
             exports: 'jQuery'
         fineuploader:
+            deps: ['jquery']
+            exports: 'jQuery'
+        'ajax-form':
             deps: ['jquery']
             exports: 'jQuery'
 

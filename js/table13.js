@@ -8,7 +8,7 @@ define([], function(){
         {region: 'м Канів', coal: 1464, blocks: 0,  natural_gas: 30336, gasoline: 5023, gas: 3423, diesel: 0, oil: 2529},
         {region: 'м Сміла', coal: 6016, blocks: 0,  natural_gas: 68118, gasoline: 5204, gas: 17442, diesel: 328, oil: 3336},
         {region: 'м Умань', coal: 5891, blocks: 0,  natural_gas: 125920, gasoline: 10877, gas: 6333, diesel: 67, oil: 26},
-        {region: 'райони', coal: '', blocks: '',  natural_gas: '', gasoline: '', gas: '', diesel: '', oil: ''},
+        {region: 'райони', type: 'label'},
         {region: 'Городишенський', coal: 2785, blocks: 0,  natural_gas: 25939, gasoline: 3065, gas: 3894, diesel: 13, oil: 894},
         {region: 'Драбівський', coal: 1587, blocks: 0,  natural_gas: 29819, gasoline: 3669, gas: 5473, diesel: 0, oil: 18},
         {region: 'Жашківський', coal: 7837, blocks: 0,  natural_gas: 37119, gasoline: 6929, gas: 7390, diesel: 0, oil: 78},

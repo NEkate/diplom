@@ -13,193 +13,203 @@
 <body>
 
 <div class="ui fluid accordion">
-    <!--first part of accordion-->
-    <div class="active title">
-        <i class="dropdown icon"></i>
-        Import csv file
-    </div>
-    <div class="active content">
-        <div id="fine-uploader" class="qq-uploader">
-            <div class="ui button qq-upload-button">Select CSV file</div>
-            <div class="qq-upload-drop-area hide"></div>
-            <ul class="qq-upload-list">
-                <li>
-                    <span class="qq-upload-file"></span>
-                    <div class="hide">
-                        <span class="qq-upload-size"></span>
-                        <div class="qq-progress-bar"></div>
-                        <span class="qq-upload-spinner"></span>
-                        <span class="qq-upload-finished"></span>
-                        <a class="qq-upload-cancel" href="#">{cancelButtonText}</a>
-                        <a class="qq-upload-retry" href="#">{retryButtonText}</a>
-                        <span class="qq-upload-status-text">{statusText}</span>
-                    </div>
-                </li>
-            </ul>
-        </div>
+<!--first part of accordion-->
+<div class="active title">
+    <i class="dropdown icon"></i>
+    Import csv file
+</div>
+<form id="xlsx-from" action="/xlsx" method="post" enctype="multipart/form-data" class="active content">
+    <input type="file" name="xlsx-file"/>
 
-        <p><button class="import ui button">Import file</button></p>
-    </div>
+    <p>
+        <button id="import-xlsx" class="ui button">Import file</button>
+    </p>
+</form>
 <!--END-->
 
 <!--second part of accordion-->
-    <div class="title">
-        <i class="dropdown icon"></i>
-        Input data
-    </div>
-    <div class="content">
+<div class="title">
+    <i class="dropdown icon"></i>
+    Input data
+</div>
+<div class="content">
 
-        <h2 class="ui bleak header">
-            Споживання окремих видів енергетичних матеріалів та продуктів перероблення нафти за містами і районами у 2009 році</h2>
-        <div id="input-data-13"></div>
+    <h2 id="grid-title" class="ui bleak header"></h2>
 
-        <h2 class="ui bleak header">
-            Споживання енергетичних матеріалів та продуктів перероблення нафти за видами економічної діяльності у 2009 році</h2>
-        <div id="input-data-10"></div>
-        <p><button class="analyze ui button">Analyze</button></p>
+    <div id="input-grid"></div>
+    <div id="forInput">
+        <div class="ui input">
+            <input type="text" placeholder="Кількість кластерів">
+        </div>
+        <div class="ui input">
+            <input type="text" placeholder="Максимальна відстань">
+        </div>
     </div>
+    <p>
+        <button id="analyze" class="ui button">Analyze</button>
+    </p>
+</div>
 <!--END-->
 
 <!--clusters results` part -->
-    <div class="title">
-        <i class="dropdown icon"></i>
-        Results of cluster analysis
-    </div>
-    <div class="content">
+<div class="title">
+    <i class="dropdown icon"></i>
+    Results of cluster analysis
+</div>
+<div class="content">
 
-        <h2 class="ui bleak header">Результат кластерізації</h2>
-        <div id="result-data"></div>
-        <p><button class="ui button">Export to CSV</button></p>
+    <h2 class="ui bleak header">Результат кластерізації</h2>
 
-        <h2 class="ui bleak header">Кількість районів у кожному кластері</h2>
-        <div id="cluster-data"></div>
-        <p><button class="ui button">Export to CSV</button></p>
+    <div id="result-data"></div>
+    <p>
+        <button class="ui button">Export to CSV</button>
+    </p>
 
-        <h2 class="ui bleak header">Графічне представлення</h2>
-        <div id="chart-1"></div>
-        <p><a href="#chart-1" class="ui button">Save to image</a></p>
+    <h2 class="ui bleak header">Кількість районів у кожному кластері</h2>
 
-        <h2 class="ui bleak header">Статистичні інформація</h2>
-        <h3 class="ui header">Використання ресурсів: вугілля кам’яне,&nbsp;т</h3>
-        <div>
-            <div class="ui label">
-                min
-                <div class="detail">214</div>
-            </div>
-            <div class="ui label">
-                max
-                <div class="detail">214</div>
-            </div>
-            <div class="ui label">
-                середне значення
-                <div class="detail">214</div>
-            </div>
-            <div class="ui label">
-                середнеквадратичне відхілення
-                <div class="detail">214</div>
-            </div>
-            <div class="ui label">
-                дисперсія
-                <div class="detail">214</div>
-            </div>
+    <div id="cluster-data"></div>
+    <p>
+        <button class="ui button">Export to CSV</button>
+    </p>
+
+    <h2 class="ui bleak header">Графічне представлення</h2>
+
+    <div id="chart-1"></div>
+    <p><a href="#chart-1" class="ui button">Save to image</a></p>
+
+    <h2 class="ui bleak header">Статистичні інформація</h2>
+
+    <h3 class="ui header">Використання ресурсів: вугілля кам’яне,&nbsp;т</h3>
+
+    <div>
+        <div class="ui label">
+            min
+            <div class="detail">214</div>
         </div>
-
-
-        <p><button class="ui button print">Print</button></p>
+        <div class="ui label">
+            max
+            <div class="detail">214</div>
+        </div>
+        <div class="ui label">
+            середне значення
+            <div class="detail">214</div>
+        </div>
+        <div class="ui label">
+            середнеквадратичне відхілення
+            <div class="detail">214</div>
+        </div>
+        <div class="ui label">
+            дисперсія
+            <div class="detail">214</div>
+        </div>
     </div>
+
+
+    <p>
+        <button class="ui button print">Print</button>
+    </p>
+</div>
 <!--END-->
 
 <!--rep results` part -->
 <div class="title">
     <i class="dropdown icon"></i>
     Energy potential
-    </div>
-<div class="content">
-<div class="ui segment">
-    <div class="ui bleak header">Реалізований енергетичний потенциал
-    <span class="ui red header">172.8</span></div>
-    <div class="ui ribbon label">Загальний обсяг видобутку і виробництва всіх видів енергоресурсів в регіоні, т н.е.</div>
-    <div>117.4</div>
-    <div class="ui ribbon label">Загальний обсяг споживання всіх видів енергоресурсів, т н.е.</div>
-    <div>128.9</div>
-    <div class="ui ribbon label">Фактична кількість населення в даному регіоні, чол.</div>
-    <div>1263.5</div>
-    <div class="ui ribbon label">Коефіцієнт приведення</div>
-    <div>0.43</div>
 </div>
+<div class="content">
+    <div class="ui segment">
+        <div class="ui bleak header">Реалізований енергетичний потенциал
+            <span class="ui red header">172.8</span></div>
+        <div class="ui ribbon label">Загальний обсяг видобутку і виробництва всіх видів енергоресурсів в регіоні, т
+            н.е.
+        </div>
+        <div>117.4</div>
+        <div class="ui ribbon label">Загальний обсяг споживання всіх видів енергоресурсів, т н.е.</div>
+        <div>128.9</div>
+        <div class="ui ribbon label">Фактична кількість населення в даному регіоні, чол.</div>
+        <div>1263.5</div>
+        <div class="ui ribbon label">Коефіцієнт приведення</div>
+        <div>0.43</div>
+    </div>
 
 
-    <p><button class="ui button print">Print</button></p>
+    <p>
+        <button class="ui button print">Print</button>
+    </p>
 </div>
 <!--END-->
 
 <!--prediction`s part of accordion-->
-    <div class="title">
-        <i class="dropdown icon"></i>
-        Predictions
-    </div>
-    <div class="content">
+<div class="title">
+    <i class="dropdown icon"></i>
+    Predictions
+</div>
+<div class="content">
 
-        <h2 class="ui bleak header">Використання паливно-енергетичних ресурсів на виробничо-експлуатаційні потреби</h2>
-        <div id="data-for-predict"></div>
-        <p><button class="analyze ui button">Predict</button></p>
+    <h2 class="ui bleak header">Використання паливно-енергетичних ресурсів на виробничо-експлуатаційні потреби</h2>
 
-<h2 class="ui bleak header">Результати прогнозування на 2010 рік:</h2>
-<div class="ui segment">
-    <div class="ui ribbon label">Прогнозовані значення:</div>
-    <div class="ui segment">Усього, тис.т умовного палива відсотків до загального обсягу:
-        <div>4151.4</div>
-    </div>
-    <div class="ui segment">котельно-пічне паливо:
-        <div>70.5</div>
-    </div>
-    <div class="ui segment">теплоенергія:
-        <div>15.3</div>
-    </div>
-    <div class="ui segment">електроенергія:
-        <div>14.2</div>
-    </div>
+    <div id="data-for-predict"></div>
+    <p>
+        <button class="analyze ui button">Predict</button>
+    </p>
 
-    <div class="ui ribbon label">Коефіцієнти моделі:</div>
-    <div class="ui segment">Усього, тис.т умовного палива відсотків до загального обсягу:
-        <div>a1 = -214889.8672</div>
-        <div>a1 = 109</div>
-    </div>
-    <div class="ui segment">котельно-пічне паливо:
-        <div>a1 = -2983.32</div>
-        <div>a1 = 1.5</div>
-    </div>
-    <div class="ui segment">теплоенергія:
-        <div>a1 = 1727.38</div>
-        <div>a1 = -0.85</div>
-    </div>
-    <div class="ui segment">електроенергія:
-        <div>a1 = 1355.94</div>
-        <div>a1 = -0.67</div>
-    </div>
+    <h2 class="ui bleak header">Результати прогнозування на 2010 рік:</h2>
 
-    <div class="ui ribbon label">Моделі для прогнозування:</div>
-    <div class="ui segment">Усього, тис.т умовного палива відсотків до загального обсягу:
-        <div>y_(t+L)=-214889.87+109(t+L)</div>
-    </div>
-    <div class="ui segment">котельно-пічне паливо:
-        <div>y_(t+L)=-2983.32+1.52(t+L)</div>
-    </div>
-    <div class="ui segment">теплоенергія:
-        <div>y_(t+L)=1727.38-0.85(t+L)</div>
-    </div>
-    <div class="ui segment">електроенергія:
-        <div>y_(t+L)=1355.94-0.67(t+L)</div>
+    <div class="ui segment">
+        <div class="ui ribbon label">Прогнозовані значення:</div>
+        <div class="ui segment">Усього, тис.т умовного палива відсотків до загального обсягу:
+            <div>4151.4</div>
+        </div>
+        <div class="ui segment">котельно-пічне паливо:
+            <div>70.5</div>
+        </div>
+        <div class="ui segment">теплоенергія:
+            <div>15.3</div>
+        </div>
+        <div class="ui segment">електроенергія:
+            <div>14.2</div>
+        </div>
+
+        <div class="ui ribbon label">Коефіцієнти моделі:</div>
+        <div class="ui segment">Усього, тис.т умовного палива відсотків до загального обсягу:
+            <div>a1 = -214889.8672</div>
+            <div>a1 = 109</div>
+        </div>
+        <div class="ui segment">котельно-пічне паливо:
+            <div>a1 = -2983.32</div>
+            <div>a1 = 1.5</div>
+        </div>
+        <div class="ui segment">теплоенергія:
+            <div>a1 = 1727.38</div>
+            <div>a1 = -0.85</div>
+        </div>
+        <div class="ui segment">електроенергія:
+            <div>a1 = 1355.94</div>
+            <div>a1 = -0.67</div>
+        </div>
+
+        <div class="ui ribbon label">Моделі для прогнозування:</div>
+        <div class="ui segment">Усього, тис.т умовного палива відсотків до загального обсягу:
+            <div>y_(t+L)=-214889.87+109(t+L)</div>
+        </div>
+        <div class="ui segment">котельно-пічне паливо:
+            <div>y_(t+L)=-2983.32+1.52(t+L)</div>
+        </div>
+        <div class="ui segment">теплоенергія:
+            <div>y_(t+L)=1727.38-0.85(t+L)</div>
+        </div>
+        <div class="ui segment">електроенергія:
+            <div>y_(t+L)=1355.94-0.67(t+L)</div>
+        </div>
     </div>
 </div>
- </div>
 </div>
 <!--END-->
-
 
 <!--dialog-->
 <div id="print-dialog" class="ui modal small hidden">
     <i class="close icon"></i>
+
     <div class="header">
         Print
     </div>
@@ -232,6 +242,35 @@
         <div class="ui button">Cancel</div>
     </div>
 </div>
+
+<script id="rowTemplate" type="text/x-kendo-tmpl">
+    <tr>
+        <td colspan="8">
+           <b>#: region #</b>
+        </td>
+   </tr>
+
+
+
+
+</script>
+
+<script id="rowTemplate2" type="text/x-kendo-tmpl">
+    <tr>
+        <td>#: region #</td>
+        <td>#: coal #</td>
+        <td>#: blocks #</td>
+        <td>#: natural_gas #</td>
+        <td>#: gasoline #</td>
+        <td>#: gas #</td>
+        <td>#: diesel #</td>
+        <td>#: oil #</td>
+    </tr>
+
+
+
+
+</script>
 
 </body>
 </html>

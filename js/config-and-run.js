@@ -8,7 +8,8 @@
       kendo: 'lib/kendo-ui/js/kendo.web.min',
       highcharts: 'lib/highcharts.com/js/highcharts.src',
       "highcharts-export": 'lib/highcharts.com/js/modules/exporting.src',
-      fineuploader: 'lib/fineuploader'
+      fineuploader: 'lib/fineuploader',
+      'ajax-form': 'lib/jquery.form.min'
     },
     shim: {
       jquery: {
@@ -31,6 +32,10 @@
         exports: 'jQuery'
       },
       fineuploader: {
+        deps: ['jquery'],
+        exports: 'jQuery'
+      },
+      'ajax-form': {
         deps: ['jquery'],
         exports: 'jQuery'
       }

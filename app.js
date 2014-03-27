@@ -1,16 +1,16 @@
 var express = require('express'),
     server = express(),
     fs = require('fs'),
-    xls = require('node-xlsx'),
+    xlsx = require('node-xlsx'),
     ejs = require('ejs');
 
 server.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '\\uploads' }));
 server.use(express.static(__dirname));
 
-server.post('/csv', function(request, response, nextRoute){
-    var file = request.files['xls-file'];
+server.post('/xlsx', function(request, response, nextRoute){
+    var file = request.files['xlsx-file'];
 
-    var data = xls.parse(file.path).worksheets[0].data;
+    var data = xlsx.parse(file.path).worksheets[0].data;
 
     fs.unlink(file.path);
 
@@ -47,6 +47,7 @@ server.post('/csv', function(request, response, nextRoute){
     str = fs.readFileSync('./views/labelTemplate.html.ejs').toString();
 
     result.labelTemplate = ejs.render(str, {length: result.columns.length});
+    result.file = file;
 
     response.send(result);
 });
