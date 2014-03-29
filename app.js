@@ -18,8 +18,7 @@ server.post('/xlsx', function(request, response, nextRoute){
         dataSource: {
             data: []
         },
-        columns: [],
-        rowTemplate: ''
+        columns: []
     };
 
     data[0].forEach(function(cell, i){
@@ -34,22 +33,37 @@ server.post('/xlsx', function(request, response, nextRoute){
 
         var cells = {};
         row.forEach(function(cell, j){
-            cells['cell' + j] = cell.value;
+            cells['cell' + j] = toInt(cell.value);
         });
 
         result.dataSource.data.push(cells);
     });
 
-    var str = fs.readFileSync('./views/defaultTemplate.html.ejs').toString();
-
-    result.defaultTemplate = ejs.render(str, {length: result.columns.length});
-
-    str = fs.readFileSync('./views/labelTemplate.html.ejs').toString();
-
-    result.labelTemplate = ejs.render(str, {length: result.columns.length});
     result.file = file;
 
     response.send(result);
 });
 
-server.listen(3030);
+server.post('/export-xlsx', function(request, response){
+    var data = JSON.parse(request.param('export-data'));
+
+	var buffer = xlsx.build({worksheets: [
+		{"name":"Cluster", "data": data}
+	]});
+
+
+	response.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	response.set("Content-Disposition", "attachment;filename=cluster.xlsx");
+	response.send(buffer);
+});
+
+server.listen(80);
+
+
+function toInt(val){
+    if (typeof val === 'string' && val.match(/^\d+,\d+$/)) {
+		return parseFloat(val.replace(',', '.'));
+	}
+
+	return val;
+}

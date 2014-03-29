@@ -1,15 +1,17 @@
-define(['table10', 'table11', 'table12', 'results', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], function (table10, table11, table12, results, $) {
+define(['table10', 'table11', 'knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], function (table10, table11, knockout, $) {
 
 	$('.ui.accordion').accordion();
 
 	$('.ui.checkbox').checkbox();
 
 
-	var objectsList;
+	var originalObjectsList,
+		originalTable;
 
 	$('#xlsx-from').ajaxForm({
 		success: function (table) {
-			objectsList = table.dataSource.data.map(function (item) {
+			originalTable = table;
+			originalObjectsList = table.dataSource.data.map(function (item) {
 				var object = [];
 
 				object.region = item.cell0;
@@ -24,29 +26,7 @@ define(['table10', 'table11', 'table12', 'results', 'semantic', 'kendo', 'highch
 				return object;
 			});
 
-			var labelTemplate = kendo.template(table.labelTemplate);
-			var defTemplate = kendo.template(table.defaultTemplate);
-
-			var data = $.extend(true, {
-				dataSource: {
-					data: [],
-					pageSize: 10
-				},
-				pageable: {
-					refresh: true,
-					pageSizes: true,
-					buttonCount: 5
-				},
-				height: 430,
-				scrollable: true,
-				sortable: true,
-				columns: [],
-				rowTemplate: function (row) {
-					return row.type === 'label' ? labelTemplate(row) : defTemplate(row);
-				}
-			}, table);
-
-			$('#grid-title').html(data.file.originalFilename.replace(/\.xlsx$/, ''));
+			$('#grid-title').html(table.file.originalFilename.replace(/\.xlsx$/, ''));
 
 			var grid = $('#input-grid');
 
@@ -55,108 +35,32 @@ define(['table10', 'table11', 'table12', 'results', 'semantic', 'kendo', 'highch
 				grid.empty();
 			}
 
-			grid.kendoGrid(data);
+			createTable('#input-grid', table.dataSource.data, table.columns);
 
-			$('#import-xlsx')
-				.closest('.content')
-				.next()
-				.click()
-			;
+			goNextContent('#import-xlsx');
 		}
 	});
 
 	//region================ GRIDS ==============================
+	createTable('#input-data-10', table10, [
+		{field: 'name', title: 'Енергетичні матеріали', headerAttributes: {"class": "table-header"}},
+		{field: 'all', title: 'Спожито палива (всього)', headerAttributes: {"class": "table-header"}},
+		{field: 'agriculture', title: 'сільське господарство, мисливство та лісове господарство', headerAttributes: {"class": "table-header"}},
+		{field: 'industry', title: 'промисловість', headerAttributes: {"class": "table-header"}},
+		{field: 'construction', title: 'будівництво', headerAttributes: {"class": "table-header"}},
+		{field: 'transport', title: "транспорт і зв'язок", headerAttributes: {"class": "table-header"}},
+		{field: 'company', title: 'підприємства і організації інших видів діяльності', headerAttributes: {"class": "table-header"}}
+	]);
 
-	$('#input-data-10').kendoGrid({
-		dataSource: {
-			data: table10,
-			pageSize: 10
-		},
-		pageable: {
-			refresh: true,
-			pageSizes: true,
-			buttonCount: 5
-		},
-		height: 430,
-		scrollable: true,
-		sortable: true,
-		columns: [
-			{field: 'name', title: 'Енергетичні матеріали', headerAttributes: {"class": "table-header"}},
-			{field: 'all', title: 'Спожито палива (всього)', headerAttributes: {"class": "table-header"}},
-			{field: 'agriculture', title: 'сільське господарство, мисливство та лісове господарство', headerAttributes: {"class": "table-header"}},
-			{field: 'industry', title: 'промисловість', headerAttributes: {"class": "table-header"}},
-			{field: 'construction', title: 'будівництво', headerAttributes: {"class": "table-header"}},
-			{field: 'transport', title: "транспорт і зв'язок", headerAttributes: {"class": "table-header"}},
-			{field: 'company', title: 'підприємства і організації інших видів діяльності', headerAttributes: {"class": "table-header"}}
-
-		]
-	});
-	$('#result-data').kendoGrid({
-		dataSource: {
-			data: results,
-			pageSize: 10
-		},
-		pageable: {
-			refresh: true,
-			pageSizes: true,
-			buttonCount: 5
-		},
-		height: 430,
-		scrollable: true,
-		sortable: true,
-		columns: [
-			{field: "region", title: "Райони та міста обласного значення", headerAttributes: {"class": "table-header"}},
-			{field: "cluster", title: "Кластеризація регіонів", headerAttributes: {"class": "table-header"}}
-		]
-	});
-	$('#cluster-data').kendoGrid({
-		dataSource: {
-			data: [
-				{cluster: 1, cityCount: 1},
-				{cluster: 2, cityCount: 1},
-				{cluster: 3, cityCount: 2},
-				{cluster: 4, cityCount: 5},
-				{cluster: 5, cityCount: 9},
-				{cluster: 6, cityCount: 8}
-			],
-			pageSize: 10
-		},
-		pageable: {
-			refresh: true,
-			pageSizes: true
-		},
-		height: 270,
-		scrollable: true,
-		sortable: true,
-		columns: [
-			{field: "cluster", title: "Кластер", headerAttributes: {"class": "table-header"}},
-			{field: "cityCount", title: "Кількість регіонів", headerAttributes: {"class": "table-header"}}
-		]
-	});
-	$('#data-for-predict').kendoGrid({
-		dataSource: {
-			data: table11,
-			pageSize: 5
-		},
-		pageable: {
-			refresh: true,
-			pageSizes: true,
-			buttonCount: 5
-		},
-		height: 270,
-		scrollable: true,
-		sortable: true,
-		columns: [
-			{field: "type", title: " ", headerAttributes: {"class": "table-header"}},
-			{field: "zero", title: "2000", headerAttributes: {"class": "table-header"}},
-			{field: "fife", title: "2005", headerAttributes: {"class": "table-header"}},
-			{field: "six", title: "2006", headerAttributes: {"class": "table-header"}},
-			{field: "seven", title: "2007", headerAttributes: {"class": "table-header"}},
-			{field: "eight", title: "2008", headerAttributes: {"class": "table-header"}},
-			{field: "nine", title: "2009", headerAttributes: {"class": "table-header"}}
-		]
-
-	});
+	createTable('#data-for-predict',table11,[
+		{field: "type", title: " ", headerAttributes: {"class": "table-header"}},
+		{field: "zero", title: "2000", headerAttributes: {"class": "table-header"}},
+		{field: "fife", title: "2005", headerAttributes: {"class": "table-header"}},
+		{field: "six", title: "2006", headerAttributes: {"class": "table-header"}},
+		{field: "seven", title: "2007", headerAttributes: {"class": "table-header"}},
+		{field: "eight", title: "2008", headerAttributes: {"class": "table-header"}},
+		{field: "nine", title: "2009", headerAttributes: {"class": "table-header"}}
+	]);
 
 	//endregion
 
@@ -203,20 +107,24 @@ define(['table10', 'table11', 'table12', 'results', 'semantic', 'kendo', 'highch
 		$(this.getAttribute('href')).data('chart').exportChart();
 	});
 
-	$('#print-dialog').modal('attach events', '#print', 'show');
+	//$('#print-dialog').modal('attach events', '#print', 'show');
 
-	$('#analyze').click(function () {
-		var clustersList = [];
-		for (var i = 0; i < objectsList.length; i++) {
-			var a = objectsList[i];
+	$('#analyze').submit(function (e) {
+		e.preventDefault();
 
-			for (var j = 0; j < objectsList.length; j++) {
-				var b = objectsList[j];
+		var objectList = $.extend(true, [], originalObjectsList),
+			clustersList = [],
+			factor = parseFloat($('#factor').val());
+		for (var i = 0; i < objectList.length; i++) {
+			var a = objectList[i];
+
+			for (var j = 0; j < objectList.length; j++) {
+				var b = objectList[j];
 
 				if (a === b || (a.cluster && b.cluster)) continue;
 
-				var compare = getCompare(a, b); // TODO: create getCompare
-				if (compare > -1 && compare < 1) {
+				var compare = getCompare(a, b);
+				if (compare > factor && compare <= 1) {
 					if (a.cluster && !b.cluster) {
 						a.cluster.push(b);
 						b.cluster = a.cluster;
@@ -241,12 +149,59 @@ define(['table10', 'table11', 'table12', 'results', 'semantic', 'kendo', 'highch
 			}
 		}
 
+		clustersView.removeAll();
+		for (i = 0; i < clustersList.length; i++){
+			for (j = 0; j < clustersList[i].length; j++){
+				clustersList[i][j].clusterIndex = i + 1;
+			}
 
+			clustersView.push(clustersList[i]);
+		}
+
+		var data = [];
+		for (i = 0;  i < clustersList.length; i++){
+			data = data.concat(clustersList[i]);
+		}
+
+		var columns = originalTable.columns.concat([{
+			field: 'clusterIndex',
+			title: 'Номер кластеру'
+		}]);
+
+		var _data = data.map(function(item){
+			var arr = $.extend([], item);
+			arr.splice(0, 0, item.region);
+			arr.push(item.clusterIndex);
+			return arr;
+		});
+
+		_data.splice(0, 0, columns.map(function(item){
+		    return item.title;
+		}));
+
+		$('#export-data').val(JSON.stringify(_data));
+
+		data = data.map(function(item){
+			var object = {
+				cell0:        item.region,
+				clusterIndex: item.clusterIndex
+			};
+
+			for (j = 0;  j < item.length; j++){
+				object['cell' + (j + 1)] = item[j];
+			}
+
+			return object;
+		});
+
+		createTable('#result-data', data, columns);
 
 		goNextContent(this);
 
 		return false;
 	});
+
+	//region ===================== Utils ===================================
 
 	function goNextContent(node) {
 		$(node)
@@ -255,4 +210,46 @@ define(['table10', 'table11', 'table12', 'results', 'semantic', 'kendo', 'highch
 			.click()
 		;
 	}
+
+	function getCompare(a, b) {
+		var middleA = a.reduce(function(sum, x){return sum + x;}) / a.length;
+		var middleB = b.reduce(function(sum, x){return sum + x;}) / b.length;
+
+		var sum = 0,
+			sumA = 0,
+			sumB = 0;
+		for (var i = 0; i < a.length; i++) {
+			var x = (a[i] - middleA);
+			var y = (b[i] - middleB);
+			sum += x * y;
+			sumA += x * x;
+			sumB += y * y;
+		}
+
+		return sum / Math.sqrt(sumA * sumB);
+	}
+
+	function createTable(selector, data, colomns){
+		$(selector).kendoGrid({
+			dataSource: {
+				data: data,
+				pageSize: 20
+			},
+			pageable: {
+				refresh: true,
+				pageSizes: true,
+				buttonCount: 5
+			},
+			height: 600,
+			scrollable: true,
+			sortable: true,
+			columns: colomns
+		});
+	}
+
+	//endregion
+
+	var clustersView = knockout.observableArray();
+
+	knockout.applyBindings({clusters: clustersView}, $('#clusters-result')[0]);
 });

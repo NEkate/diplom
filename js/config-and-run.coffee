@@ -8,6 +8,7 @@ require.config
         "highcharts-export": 'lib/highcharts.com/js/modules/exporting.src'
         fineuploader: 'lib/fineuploader'
         'ajax-form': 'lib/jquery.form.min'
+        knockout: 'lib/knockout/knockout.min'
 
     shim:
         jquery:
@@ -30,6 +31,8 @@ require.config
         'ajax-form':
             deps: ['jquery']
             exports: 'jQuery'
+        knockout:
+            exports: 'ko'
 
 
 require ['app']

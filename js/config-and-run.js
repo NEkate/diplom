@@ -9,7 +9,8 @@
       highcharts: 'lib/highcharts.com/js/highcharts.src',
       "highcharts-export": 'lib/highcharts.com/js/modules/exporting.src',
       fineuploader: 'lib/fineuploader',
-      'ajax-form': 'lib/jquery.form.min'
+      'ajax-form': 'lib/jquery.form.min',
+      knockout: 'lib/knockout/knockout.min'
     },
     shim: {
       jquery: {
@@ -38,6 +39,9 @@
       'ajax-form': {
         deps: ['jquery'],
         exports: 'jQuery'
+      },
+      knockout: {
+        exports: 'ko'
       }
     }
   });
