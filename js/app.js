@@ -1,4 +1,4 @@
-define(['table10', 'table11', 'knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], function (table10, table11, knockout, $) {
+define(['knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], function ( knockout, $) {
 
 	$('.ui.accordion').accordion();
 
@@ -40,74 +40,6 @@ define(['table10', 'table11', 'knockout', 'semantic', 'kendo', 'highcharts-expor
 			goNextContent('#import-xlsx');
 		}
 	});
-
-	//region================ GRIDS ==============================
-	createTable('#input-data-10', table10, [
-		{field: 'name', title: 'Енергетичні матеріали', headerAttributes: {"class": "table-header"}},
-		{field: 'all', title: 'Спожито палива (всього)', headerAttributes: {"class": "table-header"}},
-		{field: 'agriculture', title: 'сільське господарство, мисливство та лісове господарство', headerAttributes: {"class": "table-header"}},
-		{field: 'industry', title: 'промисловість', headerAttributes: {"class": "table-header"}},
-		{field: 'construction', title: 'будівництво', headerAttributes: {"class": "table-header"}},
-		{field: 'transport', title: "транспорт і зв'язок", headerAttributes: {"class": "table-header"}},
-		{field: 'company', title: 'підприємства і організації інших видів діяльності', headerAttributes: {"class": "table-header"}}
-	]);
-
-	createTable('#data-for-predict',table11,[
-		{field: "type", title: " ", headerAttributes: {"class": "table-header"}},
-		{field: "zero", title: "2000", headerAttributes: {"class": "table-header"}},
-		{field: "fife", title: "2005", headerAttributes: {"class": "table-header"}},
-		{field: "six", title: "2006", headerAttributes: {"class": "table-header"}},
-		{field: "seven", title: "2007", headerAttributes: {"class": "table-header"}},
-		{field: "eight", title: "2008", headerAttributes: {"class": "table-header"}},
-		{field: "nine", title: "2009", headerAttributes: {"class": "table-header"}}
-	]);
-
-	//endregion
-
-	$('#chart-1').each(function () {
-		var chart = new Highcharts.Chart({
-			chart: {
-				type: 'column',
-				renderTo: this
-			},
-			title: {
-				text: 'Кількість міст у кожному з кластерів'
-			},
-			xAxis: {
-				categories: [
-					1, 2, 3, 4, 5, 6
-				]
-			},
-			yAxis: {
-				min: 0,
-				title: {
-					text: 'Кількість міст'
-				},
-				allowDecimals: false
-			},
-			plotOptions: {
-				column: {
-					pointPadding: 0.2,
-					borderWidth: 0
-				}
-			},
-			series: [
-				{
-					name: 'Кластери',
-					data: [1, 1, 2, 5, 9, 8]
-
-				}
-			]
-		});
-
-		$(this).data('chart', chart);
-	});
-
-	$('a.button').click(function () {
-		$(this.getAttribute('href')).data('chart').exportChart();
-	});
-
-	//$('#print-dialog').modal('attach events', '#print', 'show');
 
 	$('#analyze').submit(function (e) {
 		e.preventDefault();
