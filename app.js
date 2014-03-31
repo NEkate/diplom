@@ -1,8 +1,7 @@
 var express = require('express'),
     server = express(),
     fs = require('fs'),
-    xlsx = require('node-xlsx'),
-    ejs = require('ejs');
+    xlsx = require('node-xlsx');
 
 server.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '\\uploads' }));
 server.use(express.static(__dirname));
