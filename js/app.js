@@ -46,6 +46,7 @@ define(['knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], func
 
 		var objectList = $.extend(true, [], originalObjectsList),
 			clustersList = [],
+			singleClustersList = [],
 			factor = parseFloat($('#factor').val());
 		for (var i = 0; i < objectList.length; i++) {
 			var a = objectList[i];
@@ -75,11 +76,12 @@ define(['knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], func
 			}
 
 			if (!a.cluster) {
-				var cluster = [a];
-				a.cluster = cluster;
-				clustersList.push(cluster);
+				a.cluster = singleClustersList;
+				singleClustersList.push(a);
 			}
 		}
+
+		clustersList.push(singleClustersList);
 
 		clustersView.removeAll();
 		for (i = 0; i < clustersList.length; i++){
