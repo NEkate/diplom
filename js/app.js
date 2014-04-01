@@ -1,9 +1,8 @@
-define(['table10', 'table11', 'knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], function (table10, table11, knockout, $) {
+define(['methods/closest-neighbours', 'methods/k-means', 'knockout', 'jquery', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], function (closestNeighbours, kMeans, knockout, $) {
 
 	$('.ui.accordion').accordion();
 
 	$('.ui.checkbox').checkbox();
-
 
 	var originalObjectsList,
 		originalTable;
@@ -40,29 +39,6 @@ define(['table10', 'table11', 'knockout', 'semantic', 'kendo', 'highcharts-expor
 			goNextContent('#import-xlsx');
 		}
 	});
-
-	//region================ GRIDS ==============================
-	createTable('#input-data-10', table10, [
-		{field: 'name', title: 'Енергетичні матеріали', headerAttributes: {"class": "table-header"}},
-		{field: 'all', title: 'Спожито палива (всього)', headerAttributes: {"class": "table-header"}},
-		{field: 'agriculture', title: 'сільське господарство, мисливство та лісове господарство', headerAttributes: {"class": "table-header"}},
-		{field: 'industry', title: 'промисловість', headerAttributes: {"class": "table-header"}},
-		{field: 'construction', title: 'будівництво', headerAttributes: {"class": "table-header"}},
-		{field: 'transport', title: "транспорт і зв'язок", headerAttributes: {"class": "table-header"}},
-		{field: 'company', title: 'підприємства і організації інших видів діяльності', headerAttributes: {"class": "table-header"}}
-	]);
-
-	createTable('#data-for-predict',table11,[
-		{field: "type", title: " ", headerAttributes: {"class": "table-header"}},
-		{field: "zero", title: "2000", headerAttributes: {"class": "table-header"}},
-		{field: "fife", title: "2005", headerAttributes: {"class": "table-header"}},
-		{field: "six", title: "2006", headerAttributes: {"class": "table-header"}},
-		{field: "seven", title: "2007", headerAttributes: {"class": "table-header"}},
-		{field: "eight", title: "2008", headerAttributes: {"class": "table-header"}},
-		{field: "nine", title: "2009", headerAttributes: {"class": "table-header"}}
-	]);
-
-	//endregion
 
 	$('#chart-1').each(function () {
 		var chart = new Highcharts.Chart({
@@ -112,44 +88,22 @@ define(['table10', 'table11', 'knockout', 'semantic', 'kendo', 'highcharts-expor
 	$('#analyze').submit(function (e) {
 		e.preventDefault();
 
-		var objectList = $.extend(true, [], originalObjectsList),
-			clustersList = [],
-			singleClustersList = [],
+		var i, j;
+
+		var objectList = $.extend(true, [], originalObjectsList);
+
+		var clustersList = null,
 			factor = parseFloat($('#factor').val());
-		for (var i = 0; i < objectList.length; i++) {
-			var a = objectList[i];
 
-			for (var j = 0; j < objectList.length; j++) {
-				var b = objectList[j];
+		switch (analyzeView.method()) {
+			case 'closest-neighbours':
+				clustersList = closestNeighbours(objectList, factor);
+				break;
 
-				if (a === b || (a.cluster && b.cluster)) continue;
-
-				var compare = getCompare(a, b);
-				if (compare > factor && compare <= 1) {
-					if (a.cluster && !b.cluster) {
-						a.cluster.push(b);
-						b.cluster = a.cluster;
-					}
-					else if (!a.cluster && b.cluster) {
-						b.cluster.push(a);
-						a.cluster = b.cluster;
-					}
-					else {
-						var cluster = [a, b];
-						a.cluster = cluster;
-						b.cluster = cluster;
-						clustersList.push(cluster);
-					}
-				}
-			}
-
-			if (!a.cluster) {
-				a.cluster = singleClustersList;
-				singleClustersList.push(a);
-			}
+			case 'k-means':
+				clustersList = kMeans(objectList, factor, parseInt($('#number-of-clusters').val()));
+				break;
 		}
-
-		clustersList.push(singleClustersList);
 
 		clustersView.removeAll();
 		for (i = 0; i < clustersList.length; i++){
@@ -213,24 +167,6 @@ define(['table10', 'table11', 'knockout', 'semantic', 'kendo', 'highcharts-expor
 		;
 	}
 
-	function getCompare(a, b) {
-		var middleA = a.reduce(function(sum, x){return sum + x;}) / a.length;
-		var middleB = b.reduce(function(sum, x){return sum + x;}) / b.length;
-
-		var sum = 0,
-			sumA = 0,
-			sumB = 0;
-		for (var i = 0; i < a.length; i++) {
-			var x = (a[i] - middleA);
-			var y = (b[i] - middleB);
-			sum += x * y;
-			sumA += x * x;
-			sumB += y * y;
-		}
-
-		return sum / Math.sqrt(sumA * sumB);
-	}
-
 	function createTable(selector, data, colomns){
 		$(selector).kendoGrid({
 			dataSource: {
@@ -254,4 +190,28 @@ define(['table10', 'table11', 'knockout', 'semantic', 'kendo', 'highcharts-expor
 	var clustersView = knockout.observableArray();
 
 	knockout.applyBindings({clusters: clustersView}, $('#clusters-result')[0]);
+
+	var analyzeView = {
+		method: knockout.observable('')
+	};
+
+	analyzeView.isClosestNeighbours = knockout.computed(function(){
+		return analyzeView.method() === 'closest-neighbours';
+	});
+
+	analyzeView.isKMeans = knockout.computed(function(){
+		return analyzeView.method() === 'k-means';
+	});
+
+	analyzeView.methodNotSet = knockout.computed(function(){
+		return analyzeView.method() === '';
+	});
+
+	$('#clusterization-method').dropdown({
+		onChange: function(value){
+			analyzeView.method(value);
+		}
+	});
+
+	knockout.applyBindings(analyzeView, $('#analyze')[0]);
 });

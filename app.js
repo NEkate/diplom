@@ -32,7 +32,7 @@ server.post('/xlsx', function(request, response, nextRoute){
 
         var cells = {};
         row.forEach(function(cell, j){
-            cells['cell' + j] = toInt(cell.value);
+            cells['cell' + j] = toNumber(cell.value);
         });
 
         result.dataSource.data.push(cells);
@@ -59,7 +59,7 @@ server.post('/export-xlsx', function(request, response){
 server.listen(3030);
 
 
-function toInt(val){
+function toNumber(val){
     if (typeof val === 'string' && val.match(/^\d+,\d+$/)) {
 		return parseFloat(val.replace(',', '.'));
 	}
