@@ -1,9 +1,8 @@
-define(['knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], function ( knockout, $) {
+define(['methods/closest-neighbours', 'methods/k-means', 'knockout', 'jquery', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], function (closestNeighbours, kMeans, knockout, $) {
 
 	$('.ui.accordion').accordion();
 
 	$('.ui.checkbox').checkbox();
-
 
 	var originalObjectsList,
 		originalTable;
@@ -41,47 +40,73 @@ define(['knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], func
 		}
 	});
 
+	$('#chart-1').each(function () {
+		var chart = new Highcharts.Chart({
+			chart: {
+				type: 'column',
+				renderTo: this
+			},
+			title: {
+				text: 'Кількість міст у кожному з кластерів'
+			},
+			xAxis: {
+				categories: [
+					1, 2, 3, 4, 5, 6
+				]
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: 'Кількість міст'
+				},
+				allowDecimals: false
+			},
+			plotOptions: {
+				column: {
+					pointPadding: 0.2,
+					borderWidth: 0
+				}
+			},
+			series: [
+				{
+					name: 'Кластери',
+					data: [1, 1, 2, 5, 9, 8]
+
+				}
+			]
+		});
+
+		$(this).data('chart', chart);
+	});
+
+	$('a.button').click(function () {
+		$(this.getAttribute('href')).data('chart').exportChart();
+	});
+
+	//$('#print-dialog').modal('attach events', '#print', 'show');
+
 	$('#analyze').submit(function (e) {
 		e.preventDefault();
 
-		var objectList = $.extend(true, [], originalObjectsList),
-			clustersList = [],
-			singleClustersList = [],
+		var i, j;
+
+		var objectList = $.extend(true, [], originalObjectsList);
+
+		var clustersList = null,
 			factor = parseFloat($('#factor').val());
-		for (var i = 0; i < objectList.length; i++) {
-			var a = objectList[i];
 
-			for (var j = 0; j < objectList.length; j++) {
-				var b = objectList[j];
+		switch (analyzeView.method()) {
+			case 'closest-neighbours':
+				clustersList = closestNeighbours(objectList, factor);
+				break;
 
-				if (a === b || (a.cluster && b.cluster)) continue;
-
-				var compare = getCompare(a, b);
-				if (compare > factor && compare <= 1) {
-					if (a.cluster && !b.cluster) {
-						a.cluster.push(b);
-						b.cluster = a.cluster;
-					}
-					else if (!a.cluster && b.cluster) {
-						b.cluster.push(a);
-						a.cluster = b.cluster;
-					}
-					else {
-						var cluster = [a, b];
-						a.cluster = cluster;
-						b.cluster = cluster;
-						clustersList.push(cluster);
-					}
-				}
-			}
-
-			if (!a.cluster) {
-				a.cluster = singleClustersList;
-				singleClustersList.push(a);
-			}
+			case 'k-means':
+				var K = parseInt($('#number-of-clusters').val());
+				clustersList = kMeans(objectList, factor, K);
+				if (clustersList.length > K) {
+					clustersList = kMeans(objectList, factor, K - 1);}
+				break;
 		}
-
-		clustersList.push(singleClustersList);
 
 		clustersView.removeAll();
 		for (i = 0; i < clustersList.length; i++){
@@ -145,24 +170,6 @@ define(['knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], func
 		;
 	}
 
-	function getCompare(a, b) {
-		var middleA = a.reduce(function(sum, x){return sum + x;}) / a.length;
-		var middleB = b.reduce(function(sum, x){return sum + x;}) / b.length;
-
-		var sum = 0,
-			sumA = 0,
-			sumB = 0;
-		for (var i = 0; i < a.length; i++) {
-			var x = (a[i] - middleA);
-			var y = (b[i] - middleB);
-			sum += x * y;
-			sumA += x * x;
-			sumB += y * y;
-		}
-
-		return sum / Math.sqrt(sumA * sumB);
-	}
-
 	function createTable(selector, data, colomns){
 		$(selector).kendoGrid({
 			dataSource: {
@@ -186,4 +193,28 @@ define(['knockout', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], func
 	var clustersView = knockout.observableArray();
 
 	knockout.applyBindings({clusters: clustersView}, $('#clusters-result')[0]);
+
+	var analyzeView = {
+		method: knockout.observable('')
+	};
+
+	analyzeView.isClosestNeighbours = knockout.computed(function(){
+		return analyzeView.method() === 'closest-neighbours';
+	});
+
+	analyzeView.isKMeans = knockout.computed(function(){
+		return analyzeView.method() === 'k-means';
+	});
+
+	analyzeView.methodNotSet = knockout.computed(function(){
+		return analyzeView.method() === '';
+	});
+
+	$('#clusterization-method').dropdown({
+		onChange: function(value){
+			analyzeView.method(value);
+		}
+	});
+
+	knockout.applyBindings(analyzeView, $('#analyze')[0]);
 });

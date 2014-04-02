@@ -36,16 +36,38 @@
 
         <h2 id="grid-title" class="ui bleak header"></h2>
 
-        <div id="input-grid"></div>
-        <form id="analyze" class="analyse-wrapper ui fluid form">
-            <div class="inline field">
-                <input id="factor" type="text" value="0.95">
-                <div class="ui pointing left label">
-                    Коефіцієнт подібності (повинен бути від 0 до 1)
+        <div id="input-grid" class="bottom-space"></div>
+        <form id="analyze" class="ui fluid form">
+            <div id="clusterization-method" class="ui selection dropdown bottom-space">
+                <input type="hidden" name="clusterization-method">
+                <div class="default text">Оберіть метод кластерізації</div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" data-value="closest-neighbours">Метод найблищого сусіда</div>
+                    <div class="item" data-value="k-means">k-means</div>
                 </div>
             </div>
+
+            <div class="inline field" data-bind="css: {hide: !isKMeans()}">
+                <input id="number-of-clusters" type="text" value="4">
+                <div class="ui pointing left label">
+                    Кількість кластерів
+                </div>
+            </div>
+
+            <div class="inline field" data-bind="css: {hide: methodNotSet}">
+                <input id="factor" type="text" value="0.95">
+                <div class="ui pointing left label">
+                    Коефіцієнт подібності (від 0 до 1)
+                </div>
+            </div>
+
             <p>
-                <button  class="ui button">Analyze</button>
+                <button class="ui button"
+                        data-bind="
+                            disable: methodNotSet,
+                            css: {disabled: methodNotSet}
+                            ">Analyze</button>
             </p>
         </form>
     </div>
