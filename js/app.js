@@ -101,7 +101,10 @@ define(['methods/closest-neighbours', 'methods/k-means', 'knockout', 'jquery', '
 				break;
 
 			case 'k-means':
-				clustersList = kMeans(objectList, factor, parseInt($('#number-of-clusters').val()));
+				var K = parseInt($('#number-of-clusters').val());
+				clustersList = kMeans(objectList, factor, K);
+				if (clustersList.length > K) {
+					clustersList = kMeans(objectList, factor, K - 1);}
 				break;
 		}
 
