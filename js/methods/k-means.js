@@ -17,7 +17,7 @@ define(['methods/utils/correlation-coefficient'], function (getCorrelationCoeffi
 		});
 
 		var firstKObjects = [];
-		Array.prototype.concat.apply([], distanceList.slice(-K)).forEach(function(object){
+		Array.prototype.concat.apply([], distanceList.reverse()).forEach(function(object){
 		    if (firstKObjects.indexOf(object) > -1 || firstKObjects.length === K) return;
 
 			firstKObjects.push(object);
