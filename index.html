@@ -16,7 +16,7 @@
     <!--first part of accordion-->
     <div class="active title">
         <i class="dropdown icon"></i>
-        Import csv file
+        Import xlsx file
     </div>
     <form id="xlsx-from" action="/xlsx" method="post" enctype="multipart/form-data" class="active content">
         <input type="file" name="xlsx-file"/>
@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <div data-bind="css: {visible: isClosestNeighbours() || isMethodsMix()}" class="ui segment method-form">
+            <div data-bind="css: {visible: isClosestNeighbours()}" class="ui segment method-form">
                 <div class="ui ribbon label">Метод найблищого сусіда</div>
                 <p></p>
                 <p class="inline field">
@@ -81,7 +81,17 @@
                 </div>
             </div>
 
+            <div data-bind="css: {visible: isMethodsMix()}" class="ui segment method-form">
+                <div class="ui ribbon label">Перетин алгоритмів</div>
+                <p></p>
+                <p class="inline field">
+                    <input id="methods-mix-factor" type="text" value="0.95">
 
+                    <span class="ui pointing left label">
+                        Коефіцієнт подібності (від 0 до 1)
+                    </span>
+                </p>
+            </div>
 
             <p>
                 <button class="ui button"
