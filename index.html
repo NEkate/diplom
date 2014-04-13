@@ -40,34 +40,58 @@
         <form id="analyze" class="ui fluid form">
             <div id="clusterization-method" class="ui selection dropdown bottom-space">
                 <input type="hidden" name="clusterization-method">
+
                 <div class="default text">Оберіть метод кластерізації</div>
                 <i class="dropdown icon"></i>
+
                 <div class="menu">
                     <div class="item" data-value="closest-neighbours">Метод найблищого сусіда</div>
                     <div class="item" data-value="k-means">k-means</div>
+                    <div class="item" data-value="methods-mix">Перетин алгоритмів</div>
                 </div>
             </div>
 
-            <div class="inline field" data-bind="css: {hide: !isKMeans()}">
-                <input id="number-of-clusters" type="text" value="4">
-                <div class="ui pointing left label">
-                    Кількість кластерів
+            <div data-bind="css: {visible: isClosestNeighbours() || isMethodsMix()}" class="ui segment method-form">
+                <div class="ui ribbon label">Метод найблищого сусіда</div>
+                <p></p>
+                <p class="inline field">
+                    <input id="closest-neighbours-factor" type="text" value="0.95">
+
+                    <span class="ui pointing left label">
+                        Коефіцієнт подібності (від 0 до 1)
+                    </span>
+                </p>
+            </div>
+
+            <div data-bind="css: {visible: isKMeans()}" class="ui segment method-form">
+                <div class="ui ribbon label">k-means</div>
+                <p></p>
+                <p class="inline field">
+                    <input id="number-of-clusters" type="text" value="4">
+
+                    <span class="ui pointing left label">
+                        Кількість кластерів
+                    </span>
+                </p>
+
+                <div class="inline field">
+                    <input id="k-means-factor" type="text" value="0.95">
+
+                    <div class="ui pointing left label">
+                        Коефіцієнт подібності (від 0 до 1)
+                    </div>
                 </div>
             </div>
 
-            <div class="inline field" data-bind="css: {hide: methodNotSet}">
-                <input id="factor" type="text" value="0.95">
-                <div class="ui pointing left label">
-                    Коефіцієнт подібності (від 0 до 1)
-                </div>
-            </div>
+
 
             <p>
                 <button class="ui button"
                         data-bind="
                             disable: methodNotSet,
                             css: {disabled: methodNotSet}
-                            ">Analyze</button>
+                            ">Analyze
+                </button>
             </p>
         </form>
     </div>
@@ -86,6 +110,7 @@
 
         <form action="/export-xlsx" method="post">
             <input type="hidden" id="export-data" name="export-data"/>
+
             <p>
                 <button class="ui button">Export to XLSX</button>
             </p>
@@ -100,45 +125,6 @@
             </div>
         </div>
 
-        <h2 class="ui bleak header">Кількість районів у кожному кластері</h2>
-
-
-        <h2 class="ui bleak header">Графічне представлення</h2>
-
-        <div id="chart-1"></div>
-        <p><a href="#chart-1" class="ui button">Save to image</a></p>
-
-        <h2 class="ui bleak header">Статистичні інформація</h2>
-
-        <h3 class="ui header">Використання ресурсів: вугілля кам’яне,&nbsp;т</h3>
-
-        <div>
-            <div class="ui label">
-                min
-                <div class="detail">214</div>
-            </div>
-            <div class="ui label">
-                max
-                <div class="detail">214</div>
-            </div>
-            <div class="ui label">
-                середне значення
-                <div class="detail">214</div>
-            </div>
-            <div class="ui label">
-                середнеквадратичне відхілення
-                <div class="detail">214</div>
-            </div>
-            <div class="ui label">
-                дисперсія
-                <div class="detail">214</div>
-            </div>
-        </div>
-
-
-        <p>
-            <button class="ui button print">Print</button>
-        </p>
     </div>
     <!--END-->
 

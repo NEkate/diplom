@@ -26,3 +26,11 @@
 .bottom-space{
     margin-bottom: 15px;
 }
+
+.method-form {
+    display: none;
+}
+
+.method-form.visible {
+    display: block;
+}
