@@ -132,7 +132,7 @@ define([
 
 				case 'methods-mix':
 					clustersList = methodsMix({
-						factor: parseFloat($('#closest-neighbours-factor').val()),
+						factor: parseFloat($('#methods-mix-factor').val()),
 						objectList: objectList,
 						counter: 0
 					});
