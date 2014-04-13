@@ -1,4 +1,18 @@
-define(['methods/closest-neighbours', 'methods/k-means', 'knockout', 'jquery', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'], function (closestNeighbours, kMeans, knockout, $) {
+define([
+	'methods/utils/clone-object',
+	'methods/closest-neighbours',
+	'methods/k-means',
+	'methods/methodMix',
+	'knockout',
+	'jquery', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'
+], function (
+	clone,
+	closestNeighbours,
+	kMeans,
+	methodsMix,
+	knockout,
+	$
+) {
 
 	$('.ui.accordion').accordion();
 
@@ -9,6 +23,11 @@ define(['methods/closest-neighbours', 'methods/k-means', 'knockout', 'jquery', '
 
 	$('#xlsx-from').ajaxForm({
 		success: function (table) {
+			if (typeof table !== 'object') {
+				alert('Server error');
+				return;
+			}
+
 			originalTable = table;
 			originalObjectsList = table.dataSource.data.map(function (item) {
 				var object = [];
@@ -37,6 +56,9 @@ define(['methods/closest-neighbours', 'methods/k-means', 'knockout', 'jquery', '
 			createTable('#input-grid', table.dataSource.data, table.columns);
 
 			goNextContent('#import-xlsx');
+		},
+		error: function () {
+			alert('Server error!');
 		}
 	});
 
@@ -90,63 +112,74 @@ define(['methods/closest-neighbours', 'methods/k-means', 'knockout', 'jquery', '
 
 		var i, j;
 
-		var objectList = $.extend(true, [], originalObjectsList);
+		var clustersList = getClusterList(analyzeView.method());
 
-		var clustersList = null,
-			factor = parseFloat($('#factor').val());
+		function getClusterList(methodName) {
+			var objectList = clone(originalObjectsList, []);
+			var clustersList = null;
 
-		switch (analyzeView.method()) {
-			case 'closest-neighbours':
-				clustersList = closestNeighbours(objectList, factor);
-				break;
+			switch (methodName) {
+				case 'closest-neighbours':
+					clustersList = closestNeighbours(objectList, parseFloat($('#closest-neighbours-factor').val()));
+					break;
 
-			case 'k-means':
-				var K = parseInt($('#number-of-clusters').val());
-				clustersList = kMeans(objectList, factor, K);
-				if (clustersList.length > K) {
-					clustersList = kMeans(objectList, factor, K - 1);}
-				break;
+				case 'k-means':
+					var K = parseInt($('#number-of-clusters').val()),
+						factor = parseFloat($('#k-means-factor').val());
+
+					clustersList = kMeans(objectList, factor, K, true);
+					break;
+
+				case 'methods-mix':
+					clustersList = methodsMix({
+						factor: parseFloat($('#closest-neighbours-factor').val()),
+						objectList: objectList,
+						counter: 0
+					});
+
+					break;
+			}
+
+			return clustersList;
 		}
 
 		clustersView.removeAll();
-		for (i = 0; i < clustersList.length; i++){
-			for (j = 0; j < clustersList[i].length; j++){
-				clustersList[i][j].clusterIndex = i + 1;
-			}
-
+		for (i = 0; i < clustersList.length; i++) {
 			clustersView.push(clustersList[i]);
 		}
 
 		var data = [];
-		for (i = 0;  i < clustersList.length; i++){
+		for (i = 0; i < clustersList.length; i++) {
 			data = data.concat(clustersList[i]);
 		}
 
-		var columns = originalTable.columns.concat([{
-			field: 'clusterIndex',
-			title: 'Номер кластеру'
-		}]);
+		var columns = originalTable.columns.concat([
+			{
+				field: 'clusterIndex',
+				title: 'Номер кластеру'
+			}
+		]);
 
-		var _data = data.map(function(item){
+		var _data = data.map(function (item) {
 			var arr = $.extend([], item);
 			arr.splice(0, 0, item.region);
 			arr.push(item.clusterIndex);
 			return arr;
 		});
 
-		_data.splice(0, 0, columns.map(function(item){
-		    return item.title;
+		_data.splice(0, 0, columns.map(function (item) {
+			return item.title;
 		}));
 
 		$('#export-data').val(JSON.stringify(_data));
 
-		data = data.map(function(item){
+		data = data.map(function (item) {
 			var object = {
-				cell0:        item.region,
+				cell0: item.region,
 				clusterIndex: item.clusterIndex
 			};
 
-			for (j = 0;  j < item.length; j++){
+			for (j = 0; j < item.length; j++) {
 				object['cell' + (j + 1)] = item[j];
 			}
 
@@ -170,7 +203,7 @@ define(['methods/closest-neighbours', 'methods/k-means', 'knockout', 'jquery', '
 		;
 	}
 
-	function createTable(selector, data, colomns){
+	function createTable(selector, data, colomns) {
 		$(selector).kendoGrid({
 			dataSource: {
 				data: data,
@@ -198,20 +231,24 @@ define(['methods/closest-neighbours', 'methods/k-means', 'knockout', 'jquery', '
 		method: knockout.observable('')
 	};
 
-	analyzeView.isClosestNeighbours = knockout.computed(function(){
+	analyzeView.isClosestNeighbours = knockout.computed(function () {
 		return analyzeView.method() === 'closest-neighbours';
 	});
 
-	analyzeView.isKMeans = knockout.computed(function(){
+	analyzeView.isKMeans = knockout.computed(function () {
 		return analyzeView.method() === 'k-means';
 	});
 
-	analyzeView.methodNotSet = knockout.computed(function(){
+	analyzeView.isMethodsMix = knockout.computed(function () {
+		return analyzeView.method() === 'methods-mix';
+	});
+
+	analyzeView.methodNotSet = knockout.computed(function () {
 		return analyzeView.method() === '';
 	});
 
 	$('#clusterization-method').dropdown({
-		onChange: function(value){
+		onChange: function (value) {
 			analyzeView.method(value);
 		}
 	});

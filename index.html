@@ -45,29 +45,51 @@
                 <div class="menu">
                     <div class="item" data-value="closest-neighbours">Метод найблищого сусіда</div>
                     <div class="item" data-value="k-means">k-means</div>
+                    <div class="item" data-value="methods-mix">Перетин алгоритмів</div>
                 </div>
             </div>
 
-            <div class="inline field" data-bind="css: {hide: !isKMeans()}">
-                <input id="number-of-clusters" type="text" value="4">
-                <div class="ui pointing left label">
-                    Кількість кластерів
+            <div data-bind="css: {visible: isClosestNeighbours() || isMethodsMix()}" class="ui segment method-form">
+                <div class="ui ribbon label">Метод найблищого сусіда</div>
+                <p></p>
+                <p class="inline field">
+                    <input id="closest-neighbours-factor" type="text" value="0.95">
+
+                    <span class="ui pointing left label">
+                        Коефіцієнт подібності (від 0 до 1)
+                    </span>
+                </p>
+            </div>
+
+            <div data-bind="css: {visible: isKMeans()}" class="ui segment method-form">
+                <div class="ui ribbon label">k-means</div>
+                <p></p>
+                <p class="inline field">
+                    <input id="number-of-clusters" type="text" value="4">
+
+                    <span class="ui pointing left label">
+                        Кількість кластерів
+                    </span>
+                </p>
+
+                <div class="inline field">
+                    <input id="k-means-factor" type="text" value="0.95">
+
+                    <div class="ui pointing left label">
+                        Коефіцієнт подібності (від 0 до 1)
+                    </div>
                 </div>
             </div>
 
-            <div class="inline field" data-bind="css: {hide: methodNotSet}">
-                <input id="factor" type="text" value="0.95">
-                <div class="ui pointing left label">
-                    Коефіцієнт подібності (від 0 до 1)
-                </div>
-            </div>
+
 
             <p>
                 <button class="ui button"
                         data-bind="
                             disable: methodNotSet,
                             css: {disabled: methodNotSet}
-                            ">Analyze</button>
+                            ">Analyze
+                </button>
             </p>
         </form>
     </div>
@@ -86,6 +108,7 @@
 
         <form action="/export-xlsx" method="post">
             <input type="hidden" id="export-data" name="export-data"/>
+
             <p>
                 <button class="ui button">Export to XLSX</button>
             </p>

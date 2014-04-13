@@ -1,6 +1,8 @@
-define(['methods/utils/correlation-coefficient'], function (getCorrelationCoefficient) {
+define(['methods/utils/clone-object', 'methods/utils/addIndex', 'methods/utils/correlation-coefficient'], function (clone, addIndex, getCorrelationCoefficient) {
 
 	return function closestNeighbours(objectList, factor){
+		objectList = clone(objectList, []);
+
 		var clustersList = [],
 			singleClustersList = [];
 		for (var i = 0; i < objectList.length; i++) {
@@ -37,6 +39,8 @@ define(['methods/utils/correlation-coefficient'], function (getCorrelationCoeffi
 		}
 
 		clustersList.push(singleClustersList);
+
+		addIndex(clustersList);
 
 		return clustersList;
 	};

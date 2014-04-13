@@ -1,6 +1,8 @@
-define(['methods/utils/correlation-coefficient'], function (getCorrelationCoefficient) {
+define(['methods/utils/clone-object', 'methods/utils/addIndex', 'methods/utils/correlation-coefficient'], function (clone, addIndex, getCorrelationCoefficient) {
 
-	return function kMeans(objectList, factor, K){
+	return function kMeans(originObjectList, factor, K, checkK){
+		var objectList = clone(originObjectList, []);
+
 		var distanceList = [],
 			i, j;
 
@@ -52,9 +54,15 @@ define(['methods/utils/correlation-coefficient'], function (getCorrelationCoeffi
 			clusterList.push(freeObjectList);
 		}
 
+		addIndex(clusterList);
+
+		if (checkK && clusterList.length > K) {
+			return kMeans(originObjectList, factor, K - 1, false);
+		}
+
 		return clusterList;
 	};
-
+//region ===================== UTILS =====================
 	function getDistance(a, b){
 	    var sum = 0;
 		for(var i = 0; i < a.length; i++){
@@ -83,5 +91,5 @@ define(['methods/utils/correlation-coefficient'], function (getCorrelationCoeffi
 		}
 		return array;
 	}
-
+//endregion
 });
