@@ -20,12 +20,14 @@ server.post('/xlsx', function(request, response, nextRoute){
         columns: []
     };
 
-    data[0].forEach(function(cell, i){
-        result.columns.push({
-            field: 'cell' + i,
-            title: cell.value || ' '
-        });
-    });
+	for(var i = 0; i < data[0].length; i++){
+		var cell = data[0][i];
+		result.columns.push({
+			field: 'cell' + i,
+			title: typeof cell !== 'undefined' ? (cell.value || ' ') + '' : ' '
+		});
+	}
+
 
     data.slice(1).forEach(function(row, i){
         if (!row[0] || !row[0].value) return;
