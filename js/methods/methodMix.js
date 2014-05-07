@@ -8,8 +8,10 @@ define(['methods/utils/clone-object', 'methods/closest-neighbours', 'methods/k-m
 		var list = closestNeighbours(objectList, factor);
 
 		if (list.length === 1) {
-			list.forEach(function(item){
-			    item.clusterIndex = counter;
+			list.forEach(function(cluster){
+				cluster.forEach(function(item){
+					item.clusterIndex = counter;
+				});
 			});
 			return list;
 		}
@@ -101,12 +103,12 @@ define(['methods/utils/clone-object', 'methods/closest-neighbours', 'methods/k-m
 		if (clusterList.length === 0){
 			return restObjects;
 		}
-
-		clusterList = clusterList.concat(methodMix({
+		var customs = {
 			factor: factor,
 			objectList: restObjects,
-			counter: clusterList.length
-		}));
+			counter: counter
+		};
+		clusterList = clusterList.concat(methodMix(customs));
 
 		return clusterList;
 	};

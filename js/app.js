@@ -134,7 +134,7 @@ define([
 					clustersList = methodsMix({
 						factor: parseFloat($('#methods-mix-factor').val()),
 						objectList: objectList,
-						counter: 0
+						counter: 1
 					});
 
 					break;
@@ -207,14 +207,14 @@ define([
 		$(selector).kendoGrid({
 			dataSource: {
 				data: data,
-				pageSize: 20
+				pageSize: 30
 			},
 			pageable: {
 				refresh: true,
 				pageSizes: true,
 				buttonCount: 5
 			},
-			height: 600,
+			height: 1000,
 			scrollable: true,
 			sortable: true,
 			columns: colomns
