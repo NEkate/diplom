@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="js/lib/semantic/build/packaged/css/semantic.css"/>
     <link rel="stylesheet" href="js/lib/kendo-ui/styles/kendo.common.min.css"/>
     <link rel="stylesheet" href="js/lib/kendo-ui/styles/kendo.default.min.css"/>
+    <link rel="stylesheet" href="js/lib/jquery-ui/themes/smoothness/jquery-ui.min.css"/>
     <script data-main="js/config-and-run" src="js/lib/requirejs/require.js"></script>
 </head>
 <body>
@@ -37,73 +38,12 @@
         <h2 id="grid-title" class="ui bleak header"></h2>
 
         <div id="input-grid" class="bottom-space"></div>
-        <form id="analyze" class="ui fluid form">
-            <div id="clusterization-method" class="ui selection dropdown bottom-space">
-                <input type="hidden" name="clusterization-method">
 
-                <div class="default text">Оберіть метод кластерізації</div>
-                <i class="dropdown icon"></i>
+        <p>
+            <button id="show-settings" class="ui button">Analyse</button>
+        </p>
 
-                <div class="menu">
-                    <div class="item" data-value="closest-neighbours">Метод найблищого сусіда</div>
-                    <div class="item" data-value="k-means">k-means</div>
-                    <div class="item" data-value="methods-mix">Перетин алгоритмів</div>
-                </div>
-            </div>
 
-            <div data-bind="css: {visible: isClosestNeighbours()}" class="ui segment method-form">
-                <div class="ui ribbon label">Метод найблищого сусіда</div>
-                <p></p>
-                <p class="inline field">
-                    <input id="closest-neighbours-factor" type="text" value="0.95">
-
-                    <span class="ui pointing left label">
-                        Коефіцієнт подібності (від 0 до 1)
-                    </span>
-                </p>
-            </div>
-
-            <div data-bind="css: {visible: isKMeans()}" class="ui segment method-form">
-                <div class="ui ribbon label">k-means</div>
-                <p></p>
-                <p class="inline field">
-                    <input id="number-of-clusters" type="text" value="4">
-
-                    <span class="ui pointing left label">
-                        Кількість кластерів
-                    </span>
-                </p>
-
-                <div class="inline field">
-                    <input id="k-means-factor" type="text" value="0.95">
-
-                    <div class="ui pointing left label">
-                        Коефіцієнт подібності (від 0 до 1)
-                    </div>
-                </div>
-            </div>
-
-            <div data-bind="css: {visible: isMethodsMix()}" class="ui segment method-form">
-                <div class="ui ribbon label">Перетин алгоритмів</div>
-                <p></p>
-                <p class="inline field">
-                    <input id="methods-mix-factor" type="text" value="0.95">
-
-                    <span class="ui pointing left label">
-                        Коефіцієнт подібності (від 0 до 1)
-                    </span>
-                </p>
-            </div>
-
-            <p>
-                <button class="ui button"
-                        data-bind="
-                            disable: methodNotSet,
-                            css: {disabled: methodNotSet}
-                            ">Analyze
-                </button>
-            </p>
-        </form>
     </div>
     <!--END-->
 
@@ -144,25 +84,7 @@
         Energy potential
     </div>
     <div class="content">
-        <div class="ui segment">
-            <div class="ui bleak header">Реалізований енергетичний потенциал
-                <span class="ui red header">172.8</span></div>
-            <div class="ui ribbon label">Загальний обсяг видобутку і виробництва всіх видів енергоресурсів в регіоні, т
-                н.е.
-            </div>
-            <div>117.4</div>
-            <div class="ui ribbon label">Загальний обсяг споживання всіх видів енергоресурсів, т н.е.</div>
-            <div>128.9</div>
-            <div class="ui ribbon label">Фактична кількість населення в даному регіоні, чол.</div>
-            <div>1263.5</div>
-            <div class="ui ribbon label">Коефіцієнт приведення</div>
-            <div>0.43</div>
-        </div>
 
-
-        <p>
-            <button class="ui button print">Print</button>
-        </p>
     </div>
     <!--END-->
 
@@ -173,101 +95,95 @@
     </div>
     <div class="content">
 
-        <h2 class="ui bleak header">Використання паливно-енергетичних ресурсів на виробничо-експлуатаційні потреби</h2>
 
-        <div id="data-for-predict"></div>
-        <p>
-            <button class="analyze ui button">Predict</button>
-        </p>
-
-        <h2 class="ui bleak header">Результати прогнозування на 2010 рік:</h2>
-
-        <div class="ui segment">
-            <div class="ui ribbon label">Прогнозовані значення:</div>
-            <div class="ui segment">Усього, тис.т умовного палива відсотків до загального обсягу:
-                <div>4151.4</div>
-            </div>
-            <div class="ui segment">котельно-пічне паливо:
-                <div>70.5</div>
-            </div>
-            <div class="ui segment">теплоенергія:
-                <div>15.3</div>
-            </div>
-            <div class="ui segment">електроенергія:
-                <div>14.2</div>
-            </div>
-
-            <div class="ui ribbon label">Коефіцієнти моделі:</div>
-            <div class="ui segment">Усього, тис.т умовного палива відсотків до загального обсягу:
-                <div>a1 = -214889.8672</div>
-                <div>a1 = 109</div>
-            </div>
-            <div class="ui segment">котельно-пічне паливо:
-                <div>a1 = -2983.32</div>
-                <div>a1 = 1.5</div>
-            </div>
-            <div class="ui segment">теплоенергія:
-                <div>a1 = 1727.38</div>
-                <div>a1 = -0.85</div>
-            </div>
-            <div class="ui segment">електроенергія:
-                <div>a1 = 1355.94</div>
-                <div>a1 = -0.67</div>
-            </div>
-
-            <div class="ui ribbon label">Моделі для прогнозування:</div>
-            <div class="ui segment">Усього, тис.т умовного палива відсотків до загального обсягу:
-                <div>y_(t+L)=-214889.87+109(t+L)</div>
-            </div>
-            <div class="ui segment">котельно-пічне паливо:
-                <div>y_(t+L)=-2983.32+1.52(t+L)</div>
-            </div>
-            <div class="ui segment">теплоенергія:
-                <div>y_(t+L)=1727.38-0.85(t+L)</div>
-            </div>
-            <div class="ui segment">електроенергія:
-                <div>y_(t+L)=1355.94-0.67(t+L)</div>
-            </div>
-        </div>
     </div>
 </div>
 <!--END-->
 
-<!--dialog-->
-<div id="print-dialog" class="ui modal small hidden">
-    <i class="close icon"></i>
+<div class="hide">
 
-    <div class="header">
-        Print
-    </div>
-    <div class="content">
-        <div class="ui form">
-            <div class="grouped inline fields">
-                <div class="field">
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="fruit" checked="checked">
-                        <label>Кластерізація районів</label>
+    <!--dialog-->
+    <div id="settings-dialog">
+        <div class="content">
+            <form id="analyse" class="ui fluid form">
+                <div class="field"><label><input type="checkbox" name="range" data-bind="checked: range"> Необхідне інтервальне оцінювання</label></div>
+                <div class="field"><label><input type="checkbox" name="rang" data-bind="checked: rang"> Необхіден ранговий аналіз</label></div>
+                <div class="field"><label><input type="checkbox" name="predict" data-bind="checked: predict"> Необхідно прогнозування</label></div>
+                <div class="field"><label><input type="checkbox" name="cluster" data-bind="checked: cluster"> Необхіден кластерний аналіз</label></div>
+
+                <div data-bind="css: {'hide': !cluster()}">
+                    <div id="clusterization-method" class="ui selection dropdown bottom-space">
+                        <input type="hidden" name="clusterization-method">
+
+                        <div class="default text">Перетин алгоритмів</div>
+                        <i class="dropdown icon"></i>
+
+                        <div class="menu">
+                            <div class="item" data-value="closest-neighbours">Метод найблищого сусіда</div>
+                            <div class="item" data-value="k-means">k-means</div>
+                            <div class="item" data-value="methods-mix">Перетин алгоритмів</div>
+                        </div>
+                    </div>
+
+                    <div data-bind="css: {visible: isClosestNeighbours()}" class="ui segment method-form">
+                        <div class="ui ribbon label">Метод найблищого сусіда</div>
+                        <p></p>
+
+                        <p class="inline field">
+                            <input id="closest-neighbours-factor" type="text" value="0.95">
+
+                    <span class="ui pointing left label">
+                        Коефіцієнт подібності (від 0 до 1)
+                    </span>
+                        </p>
+                    </div>
+
+                    <div data-bind="css: {visible: isKMeans()}" class="ui segment method-form">
+                        <div class="ui ribbon label">k-means</div>
+                        <p></p>
+
+                        <p class="inline field">
+                            <input id="number-of-clusters" type="text" value="4">
+
+                    <span class="ui pointing left label">
+                        Кількість кластерів
+                    </span>
+                        </p>
+
+                        <div class="inline field">
+                            <input id="k-means-factor" type="text" value="0.95">
+
+                            <div class="ui pointing left label">
+                                Коефіцієнт подібності (від 0 до 1)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div data-bind="css: {visible: isMethodsMix()}" class="ui segment method-form">
+                        <div class="ui ribbon label">Перетин алгоритмів</div>
+                        <p></p>
+
+                        <p class="inline field">
+                            <input id="methods-mix-factor" type="text" value="0.95">
+
+                    <span class="ui pointing left label">
+                        Коефіцієнт подібності (від 0 до 1)
+                    </span>
+                        </p>
                     </div>
                 </div>
-                <div class="field">
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="fruit" checked="checked">
-                        <label>Кількість регіонів</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="fruit" checked="checked">
-                        <label>Кількість міст у кожному з кластерів</label>
-                    </div>
-                </div>
-            </div>
+
+                <p class="actions">
+                    <button class="ui button"
+                            data-bind=" disable: isDisabled,
+                            css: {disabled: isDisabled}">
+                        ok
+                    </button>
+                </p>
+            </form>
         </div>
     </div>
-    <div class="actions">
-        <div class="ui button">OK</div>
-        <div class="ui button">Cancel</div>
-    </div>
+
 </div>
 
 </body>

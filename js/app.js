@@ -4,7 +4,7 @@ define([
 	'methods/k-means',
 	'methods/methodMix',
 	'knockout',
-	'jquery', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'
+	'jquery', 'jqueryui', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'
 ], function (
 	clone,
 	closestNeighbours,
@@ -13,7 +13,6 @@ define([
 	knockout,
 	$
 ) {
-
 	$('.ui.accordion').accordion();
 
 	$('.ui.checkbox').checkbox();
@@ -105,10 +104,22 @@ define([
 		$(this.getAttribute('href')).data('chart').exportChart();
 	});
 
-	//$('#print-dialog').modal('attach events', '#print', 'show');
+	var settingsDialog = $('#settings-dialog').dialog({
+		width: 700,
+		minHeight: 360,
+		title: "Налаштування для аналізу",
+		autoOpen: false,
+		modal: true
+	});
 
-	$('#analyze').submit(function (e) {
+	$('#show-settings').click(function(){
+		settingsDialog.dialog('open');
+	});
+
+	$('#analyse').submit(function (e) {
 		e.preventDefault();
+
+		settingsDialog.dialog('close');
 
 		var i, j;
 
@@ -188,7 +199,7 @@ define([
 
 		createTable('#result-data', data, columns);
 
-		goNextContent(this);
+		goNextContent($('#show-settings'));
 
 		return false;
 	});
@@ -228,7 +239,11 @@ define([
 	knockout.applyBindings({clusters: clustersView}, $('#clusters-result')[0]);
 
 	var analyzeView = {
-		method: knockout.observable('')
+		method: knockout.observable('methods-mix'),
+		range: knockout.observable(true),
+		rang: knockout.observable(true),
+		cluster: knockout.observable(true),
+		predict: knockout.observable(true)
 	};
 
 	analyzeView.isClosestNeighbours = knockout.computed(function () {
@@ -243,8 +258,28 @@ define([
 		return analyzeView.method() === 'methods-mix';
 	});
 
-	analyzeView.methodNotSet = knockout.computed(function () {
-		return analyzeView.method() === '';
+
+
+	analyzeView.isDisabled = knockout.computed(function () {
+		if (
+			(analyzeView.range() ||
+			analyzeView.rang() ||
+			analyzeView.predict())
+			&&
+			! analyzeView.cluster()
+			){
+			return false;
+		}
+		else if(
+			analyzeView.cluster()
+			&&
+			analyzeView.method() !== ''
+			){
+			return false;
+		}
+		else {
+			return true;
+		}
 	});
 
 	$('#clusterization-method').dropdown({
@@ -253,5 +288,5 @@ define([
 		}
 	});
 
-	knockout.applyBindings(analyzeView, $('#analyze')[0]);
+	knockout.applyBindings(analyzeView, $('#settings-dialog')[0]);
 });

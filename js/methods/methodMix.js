@@ -1,4 +1,12 @@
-define(['methods/utils/clone-object', 'methods/closest-neighbours', 'methods/k-means'], function (clone, closestNeighbours, kMeans) {
+define([
+	'methods/utils/clone-object',
+	'methods/closest-neighbours',
+	'methods/k-means'
+], function (
+	clone,
+	closestNeighbours,
+	kMeans
+) {
 
 	return function methodMix(options){
 		var objectList = clone(options.objectList, []),

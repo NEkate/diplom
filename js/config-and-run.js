@@ -4,6 +4,7 @@
     baseUrl: 'js/',
     paths: {
       jquery: 'lib/jquery/jquery.min',
+      jqueryui: 'lib/jquery-ui/ui/minified/jquery-ui.min',
       semantic: 'lib/semantic/build/packaged/javascript/semantic',
       kendo: 'lib/kendo-ui/js/kendo.web.min',
       highcharts: 'lib/highcharts.com/js/highcharts.src',
@@ -14,6 +15,10 @@
     },
     shim: {
       jquery: {
+        exports: 'jQuery'
+      },
+      jqueryui: {
+        deps: ['jquery'],
         exports: 'jQuery'
       },
       semantic: {
