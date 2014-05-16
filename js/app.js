@@ -209,14 +209,14 @@ define([
 		$(selector).kendoGrid({
 			dataSource: {
 				data: data,
-				pageSize: 30
+				pageSize: 10
 			},
 			pageable: {
 				refresh: true,
 				pageSizes: true,
 				buttonCount: 5
 			},
-			height: 1000,
+			height: 400,
 			scrollable: true,
 			sortable: true,
 			columns: colomns
