@@ -50,53 +50,41 @@
     <!--clusters results` part -->
     <div class="title">
         <i class="dropdown icon"></i>
-        Results of cluster analysis
+        Results
     </div>
     <div class="content">
 
-        <h2 class="ui bleak header">Результат кластерізації</h2>
 
-        <div id="result-data"></div>
+        <div id="rank-chart" data-bind="css: {'hide': !rang()}"></div>
 
-        <form action="/export-xlsx" method="post">
-            <input type="hidden" id="export-data" name="export-data"/>
 
-            <p>
-                <button class="ui button">Export to XLSX</button>
-            </p>
-        </form>
+        <div data-bind="css: {'hide': !cluster()}">
+            <h2 class="ui bleak header">Результат кластерізації</h2>
 
-        <div id="clusters-result" class="ui segment">
-            <div data-bind="foreach: clusters">
-                <div class="ui ribbon label">Кластер №<span data-bind="text: $index() + 1"></span></div>
-                <ul data-bind="foreach: $data">
-                    <li data-bind="text: $data.region"></li>
-                </ul>
+            <div id="result-data"></div>
+
+            <form action="/export-xlsx" method="post">
+                <input type="hidden" id="export-data" name="export-data"/>
+
+                <p>
+                    <button class="ui button">Export to XLSX</button>
+                </p>
+            </form>
+
+            <div id="clusters-result" class="ui segment">
+                <div data-bind="foreach: clusters">
+                    <div class="ui ribbon label">Кластер №<span data-bind="text: $index() + 1"></span></div>
+                    <ul data-bind="foreach: $data">
+                        <li data-bind="text: $data.region"></li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-    </div>
-    <!--END-->
-
-    <!--rep results` part -->
-    <div class="title">
-        <i class="dropdown icon"></i>
-        Energy potential
-    </div>
-    <div class="content">
 
     </div>
     <!--END-->
 
-    <!--prediction`s part of accordion-->
-    <div class="title">
-        <i class="dropdown icon"></i>
-        Predictions
-    </div>
-    <div class="content">
-
-
-    </div>
 </div>
 <!--END-->
 
@@ -106,10 +94,14 @@
     <div id="settings-dialog">
         <div class="content">
             <form id="analyse" class="ui fluid form">
-                <div class="field"><label><input type="checkbox" name="range" data-bind="checked: range"> Необхідне інтервальне оцінювання</label></div>
-                <div class="field"><label><input type="checkbox" name="rang" data-bind="checked: rang"> Необхіден ранговий аналіз</label></div>
-                <div class="field"><label><input type="checkbox" name="predict" data-bind="checked: predict"> Необхідно прогнозування</label></div>
-                <div class="field"><label><input type="checkbox" name="cluster" data-bind="checked: cluster"> Необхіден кластерний аналіз</label></div>
+                <div class="field"><label><input type="checkbox" name="rang" data-bind="checked: rang"> Необхіден
+                    ранговий аналіз</label></div>
+                <div class="field"><label><input type="checkbox" name="range" data-bind="checked: range"> Необхідне
+                    інтервальне оцінювання</label></div>
+                <div class="field"><label><input type="checkbox" name="predict" data-bind="checked: predict"> Необхідно
+                    прогнозування</label></div>
+                <div class="field"><label><input type="checkbox" name="cluster" data-bind="checked: cluster"> Необхіден
+                    кластерний аналіз</label></div>
 
                 <div data-bind="css: {'hide': !cluster()}">
                     <div id="clusterization-method" class="ui selection dropdown bottom-space">

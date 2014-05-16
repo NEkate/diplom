@@ -1,20 +1,14 @@
 define([
 	'methods/utils/clone-object',
 	'methods/utils/data-normalization',
+	'methods/rankAnalyse',
 	'methods/closest-neighbours',
 	'methods/k-means',
 	'methods/methodMix',
 	'knockout',
 	'jquery', 'jqueryui', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'
-], function (
-	clone,
-	dataNormalization,
-	closestNeighbours,
-	kMeans,
-	methodsMix,
-	knockout,
-	$
-) {
+], function (clone, dataNormalization, rankAnalyse, closestNeighbours, kMeans, methodsMix, knockout, $) {
+
 	$('.ui.accordion').accordion();
 
 	$('.ui.checkbox').checkbox();
@@ -64,7 +58,6 @@ define([
 	});
 
 
-
 	$('a.button').click(function () {
 		$(this.getAttribute('href')).data('chart').exportChart();
 	});
@@ -77,7 +70,7 @@ define([
 		modal: true
 	});
 
-	$('#show-settings').click(function(){
+	$('#show-settings').click(function () {
 		settingsDialog.dialog('open');
 	});
 
@@ -88,81 +81,114 @@ define([
 
 		var i, j;
 
-		var clustersList = getClusterList(analyzeView.method());
+		//region ===================== rank analyse =====================
 
-		function getClusterList(methodName) {
-			var objectList = dataNormalization(originalObjectsList);
-			var clustersList = null;
+		if (analyzeView.rang()) {
 
-			switch (methodName) {
-				case 'closest-neighbours':
-					clustersList = closestNeighbours(objectList, parseFloat($('#closest-neighbours-factor').val()));
-					break;
+			var averageList = rankAnalyse(dataNormalization(originalObjectsList));
 
-				case 'k-means':
-					var K = parseInt($('#number-of-clusters').val()),
-						factor = parseFloat($('#k-means-factor').val());
+			createChart(
+				'#rank-chart',
+				[
+					{
+						data: averageList.map(function (object) {
+							return {
+								name: object.region,
+								y: object.averageValue
+							};
+						})
+					}
+				],
+				{
+					title: 'Ранговый анализ',
+					oXLabels: averageList.map(function (object) {
+						return averageList.indexOf(object) + 1;
+					})
+				}
+			);
+		}
+		//endregion
 
-					clustersList = kMeans(objectList, factor, K, true);
-					break;
+		//region ===================== cluster analyse =====================
+		if (analyzeView.cluster()) {
 
-				case 'methods-mix':
-					clustersList = methodsMix({
-						factor: parseFloat($('#methods-mix-factor').val()),
-						objectList: objectList,
-						counter: 1
-					});
+			var clustersList = getClusterList(analyzeView.method());
 
-					break;
+			function getClusterList(methodName) {
+				var objectList = dataNormalization(originalObjectsList);
+				var clustersList = null;
+
+				switch (methodName) {
+					case 'closest-neighbours':
+						clustersList = closestNeighbours(objectList, parseFloat($('#closest-neighbours-factor').val()));
+						break;
+
+					case 'k-means':
+						var K = parseInt($('#number-of-clusters').val()),
+							factor = parseFloat($('#k-means-factor').val());
+
+						clustersList = kMeans(objectList, factor, K, true);
+						break;
+
+					case 'methods-mix':
+						clustersList = methodsMix({
+							factor: parseFloat($('#methods-mix-factor').val()),
+							objectList: objectList,
+							counter: 1
+						});
+
+						break;
+				}
+
+				return clustersList;
 			}
 
-			return clustersList;
-		}
-
-		clustersView.removeAll();
-		for (i = 0; i < clustersList.length; i++) {
-			clustersView.push(clustersList[i]);
-		}
-
-		var data = [];
-		for (i = 0; i < clustersList.length; i++) {
-			data = data.concat(clustersList[i]);
-		}
-
-		var columns = originalTable.columns.concat([
-			{
-				field: 'clusterIndex',
-				title: 'Номер кластеру'
-			}
-		]);
-
-		var _data = data.map(function (item) {
-			var arr = $.extend([], item);
-			arr.splice(0, 0, item.region);
-			arr.push(item.clusterIndex);
-			return arr;
-		});
-
-		_data.splice(0, 0, columns.map(function (item) {
-			return item.title;
-		}));
-
-		$('#export-data').val(JSON.stringify(_data));
-
-		data = data.map(function (item) {
-			var object = {
-				cell0: item.region,
-				clusterIndex: item.clusterIndex
-			};
-
-			for (j = 0; j < item.length; j++) {
-				object['cell' + (j + 1)] = item[j];
+			clustersView.removeAll();
+			for (i = 0; i < clustersList.length; i++) {
+				clustersView.push(clustersList[i]);
 			}
 
-			return object;
-		});
+			var data = [];
+			for (i = 0; i < clustersList.length; i++) {
+				data = data.concat(clustersList[i]);
+			}
 
-		createTable('#result-data', data, columns);
+			var columns = originalTable.columns.concat([
+				{
+					field: 'clusterIndex',
+					title: 'Номер кластеру'
+				}
+			]);
+
+			var _data = data.map(function (item) {
+				var arr = $.extend([], item);
+				arr.splice(0, 0, item.region);
+				arr.push(item.clusterIndex);
+				return arr;
+			});
+
+			_data.splice(0, 0, columns.map(function (item) {
+				return item.title;
+			}));
+
+			$('#export-data').val(JSON.stringify(_data));
+
+			data = data.map(function (item) {
+				var object = {
+					cell0: item.region,
+					clusterIndex: item.clusterIndex
+				};
+
+				for (j = 0; j < item.length; j++) {
+					object['cell' + (j + 1)] = item[j];
+				}
+
+				return object;
+			});
+
+			createTable('#result-data', data, columns);
+		}
+		//endregion
 
 		goNextContent($('#show-settings'));
 
@@ -197,18 +223,48 @@ define([
 		});
 	}
 
+	function createChart(selector, data, options) {
+		$(selector).highcharts({
+			title: {
+				text: options.title
+			},
+			xAxis: {
+				categories: options.oXLabels,
+				allowDecimals: false
+			},
+			yAxis: {
+				title: {
+					text: options.oYTitle
+				},
+				min: 0
+			},
+			tooltip: {
+				formatter: function () {
+					return 'регион: ' + this.point.name + '<br/>енергоспоживання: ' + this.y.toFixed(4);
+				}
+			},
+			legend: {
+				enabled: false
+			},
+			credits: {
+				enabled: false
+			},
+			series: data
+		});
+	}
+
 	//endregion
 
 	var clustersView = knockout.observableArray();
 
-	knockout.applyBindings({clusters: clustersView}, $('#clusters-result')[0]);
 
 	var analyzeView = {
 		method: knockout.observable('methods-mix'),
 		range: knockout.observable(true),
 		rang: knockout.observable(true),
 		cluster: knockout.observable(true),
-		predict: knockout.observable(true)
+		predict: knockout.observable(true),
+		clusters: clustersView
 	};
 
 	analyzeView.isClosestNeighbours = knockout.computed(function () {
@@ -224,22 +280,20 @@ define([
 	});
 
 
-
 	analyzeView.isDisabled = knockout.computed(function () {
 		if (
 			(analyzeView.range() ||
-			analyzeView.rang() ||
-			analyzeView.predict())
-			&&
-			! analyzeView.cluster()
-			){
+				analyzeView.rang() ||
+				analyzeView.predict())
+				&& !analyzeView.cluster()
+			) {
 			return false;
 		}
-		else if(
+		else if (
 			analyzeView.cluster()
-			&&
-			analyzeView.method() !== ''
-			){
+				&&
+				analyzeView.method() !== ''
+			) {
 			return false;
 		}
 		else {
@@ -253,5 +307,5 @@ define([
 		}
 	});
 
-	knockout.applyBindings(analyzeView, $('#settings-dialog')[0]);
+	knockout.applyBindings(analyzeView, $('body')[0]);
 });
