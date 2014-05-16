@@ -1,5 +1,6 @@
 define([
 	'methods/utils/clone-object',
+	'methods/utils/data-normalization',
 	'methods/closest-neighbours',
 	'methods/k-means',
 	'methods/methodMix',
@@ -7,6 +8,7 @@ define([
 	'jquery', 'jqueryui', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'
 ], function (
 	clone,
+	dataNormalization,
 	closestNeighbours,
 	kMeans,
 	methodsMix,
@@ -61,44 +63,7 @@ define([
 		}
 	});
 
-	$('#chart-1').each(function () {
-		var chart = new Highcharts.Chart({
-			chart: {
-				type: 'column',
-				renderTo: this
-			},
-			title: {
-				text: 'Кількість міст у кожному з кластерів'
-			},
-			xAxis: {
-				categories: [
-					1, 2, 3, 4, 5, 6
-				]
-			},
-			yAxis: {
-				min: 0,
-				title: {
-					text: 'Кількість міст'
-				},
-				allowDecimals: false
-			},
-			plotOptions: {
-				column: {
-					pointPadding: 0.2,
-					borderWidth: 0
-				}
-			},
-			series: [
-				{
-					name: 'Кластери',
-					data: [1, 1, 2, 5, 9, 8]
 
-				}
-			]
-		});
-
-		$(this).data('chart', chart);
-	});
 
 	$('a.button').click(function () {
 		$(this.getAttribute('href')).data('chart').exportChart();
@@ -126,7 +91,7 @@ define([
 		var clustersList = getClusterList(analyzeView.method());
 
 		function getClusterList(methodName) {
-			var objectList = clone(originalObjectsList, []);
+			var objectList = dataNormalization(originalObjectsList);
 			var clustersList = null;
 
 			switch (methodName) {
