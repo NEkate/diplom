@@ -16,7 +16,10 @@ define([
 	        var ai = object.predict,
 				bi = bHash[object.region];
 
-			return ai * 0.6 + bi * 0.4;
+			return {
+				region: object.region,
+				predict: ai * 0.6 + bi * 0.4
+			};
 	    });
 	}
 });

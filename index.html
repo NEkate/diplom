@@ -59,7 +59,7 @@
 
 
         <div data-bind="css: {'hide': !cluster()}">
-            <h2 class="ui bleak header">Результат кластерізації</h2>
+            <h2 class="ui bleak header">Кластерізація</h2>
 
             <div id="result-data"></div>
 
@@ -79,6 +79,11 @@
                     </ul>
                 </div>
             </div>
+        </div>
+
+        <div data-bind="css: {'hide': !predict()}">
+            <h2 class="ui bleak header">Прогнозування</h2>
+            <div id="predict-grid"></div>
         </div>
 
 

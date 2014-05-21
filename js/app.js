@@ -5,9 +5,19 @@ define([
 	'methods/closest-neighbours',
 	'methods/k-means',
 	'methods/methodMix',
+	'methods/predicts/methodMix',
 	'knockout',
 	'jquery', 'jqueryui', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'
-], function (clone, dataNormalization, rankAnalyse, closestNeighbours, kMeans, methodsMix, knockout, $) {
+], function (
+	clone,
+	dataNormalization,
+	rankAnalyse,
+	closestNeighbours,
+	kMeans,
+	methodsMix,
+	predict,
+	knockout,
+	$) {
 
 	$('.ui.accordion').accordion();
 
@@ -187,6 +197,34 @@ define([
 			});
 
 			createTable('#result-data', data, columns);
+		}
+		//endregion
+
+		//region ===================== predict =====================
+
+		if (analyzeView.predict()){
+			var predictList = predict({
+					objectList: originalObjectsList,
+					alpha: 0.9
+				}),
+				predictData = predictList.map(function(object){
+				    return {
+						cell0: object.region,
+						cell1: object.predict
+					};
+				}),
+				predictColumns = [
+					{
+						field: 'cell0',
+						title: ' '
+					},
+					{
+						field: 'cell1',
+						title: 'Прогнозоване значення'
+					}
+				];
+
+			createTable('#predict-grid', predictData, predictColumns);
 		}
 		//endregion
 
