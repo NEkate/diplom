@@ -47,6 +47,95 @@
     </div>
     <!--END-->
 
+    <!-- settings part -->
+    <div class="title">
+        <i class="dropdown icon"></i>
+        Settings
+    </div>
+    <div class="content">
+        <form id="analyse" class="ui fluid form">
+            <div class="field"><label><input type="checkbox" name="rang" data-bind="checked: rang"> Необхіден
+                ранговий аналіз</label></div>
+            <div class="field"><label><input type="checkbox" name="range" data-bind="checked: range"> Необхідне
+                інтервальне оцінювання</label></div>
+            <div class="field"><label><input type="checkbox" name="predict" data-bind="checked: predict"> Необхідно
+                прогнозування</label></div>
+            <div class="field"><label><input type="checkbox" name="cluster" data-bind="checked: cluster"> Необхіден
+                кластерний аналіз</label></div>
+
+            <div data-bind="css: {'hide': !cluster()}">
+                <div id="clusterization-method" class="ui selection dropdown bottom-space">
+                    <input type="hidden" name="clusterization-method">
+
+                    <div class="default text">Перетин алгоритмів</div>
+                    <i class="dropdown icon"></i>
+
+                    <div class="menu">
+                        <div class="item" data-value="closest-neighbours">Метод найблищого сусіда</div>
+                        <div class="item" data-value="k-means">k-means</div>
+                        <div class="item" data-value="methods-mix">Перетин алгоритмів</div>
+                    </div>
+                </div>
+
+                <div data-bind="css: {visible: isClosestNeighbours()}" class="ui segment method-form">
+                    <div class="ui ribbon label">Метод найблищого сусіда</div>
+                    <p></p>
+
+                    <p class="inline field">
+                        <input id="closest-neighbours-factor" type="text" value="0.95">
+
+                    <span class="ui pointing left label">
+                        Коефіцієнт подібності (від 0 до 1)
+                    </span>
+                    </p>
+                </div>
+
+                <div data-bind="css: {visible: isKMeans()}" class="ui segment method-form">
+                    <div class="ui ribbon label">k-means</div>
+                    <p></p>
+
+                    <p class="inline field">
+                        <input id="number-of-clusters" type="text" value="4">
+
+                    <span class="ui pointing left label">
+                        Кількість кластерів
+                    </span>
+                    </p>
+
+                    <div class="inline field">
+                        <input id="k-means-factor" type="text" value="0.95">
+
+                        <div class="ui pointing left label">
+                            Коефіцієнт подібності (від 0 до 1)
+                        </div>
+                    </div>
+                </div>
+
+                <div data-bind="css: {visible: isMethodsMix()}" class="ui segment method-form">
+                    <div class="ui ribbon label">Перетин алгоритмів</div>
+                    <p></p>
+
+                    <p class="inline field">
+                        <input id="methods-mix-factor" type="text" value="0.95">
+
+                    <span class="ui pointing left label">
+                        Коефіцієнт подібності (від 0 до 1)
+                    </span>
+                    </p>
+                </div>
+            </div>
+
+            <p class="actions">
+                <button class="ui button"
+                        data-bind=" disable: isDisabled,
+                            css: {disabled: isDisabled}">
+                    ok
+                </button>
+            </p>
+        </form>
+    </div>
+    <!-- END -->
+
     <!--clusters results` part -->
     <div class="title">
         <i class="dropdown icon"></i>
@@ -92,96 +181,5 @@
 
 </div>
 <!--END-->
-
-<div class="hide">
-
-    <!--dialog-->
-    <div id="settings-dialog">
-        <div class="content">
-            <form id="analyse" class="ui fluid form">
-                <div class="field"><label><input type="checkbox" name="rang" data-bind="checked: rang"> Необхіден
-                    ранговий аналіз</label></div>
-                <div class="field"><label><input type="checkbox" name="range" data-bind="checked: range"> Необхідне
-                    інтервальне оцінювання</label></div>
-                <div class="field"><label><input type="checkbox" name="predict" data-bind="checked: predict"> Необхідно
-                    прогнозування</label></div>
-                <div class="field"><label><input type="checkbox" name="cluster" data-bind="checked: cluster"> Необхіден
-                    кластерний аналіз</label></div>
-
-                <div data-bind="css: {'hide': !cluster()}">
-                    <div id="clusterization-method" class="ui selection dropdown bottom-space">
-                        <input type="hidden" name="clusterization-method">
-
-                        <div class="default text">Перетин алгоритмів</div>
-                        <i class="dropdown icon"></i>
-
-                        <div class="menu">
-                            <div class="item" data-value="closest-neighbours">Метод найблищого сусіда</div>
-                            <div class="item" data-value="k-means">k-means</div>
-                            <div class="item" data-value="methods-mix">Перетин алгоритмів</div>
-                        </div>
-                    </div>
-
-                    <div data-bind="css: {visible: isClosestNeighbours()}" class="ui segment method-form">
-                        <div class="ui ribbon label">Метод найблищого сусіда</div>
-                        <p></p>
-
-                        <p class="inline field">
-                            <input id="closest-neighbours-factor" type="text" value="0.95">
-
-                    <span class="ui pointing left label">
-                        Коефіцієнт подібності (від 0 до 1)
-                    </span>
-                        </p>
-                    </div>
-
-                    <div data-bind="css: {visible: isKMeans()}" class="ui segment method-form">
-                        <div class="ui ribbon label">k-means</div>
-                        <p></p>
-
-                        <p class="inline field">
-                            <input id="number-of-clusters" type="text" value="4">
-
-                    <span class="ui pointing left label">
-                        Кількість кластерів
-                    </span>
-                        </p>
-
-                        <div class="inline field">
-                            <input id="k-means-factor" type="text" value="0.95">
-
-                            <div class="ui pointing left label">
-                                Коефіцієнт подібності (від 0 до 1)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div data-bind="css: {visible: isMethodsMix()}" class="ui segment method-form">
-                        <div class="ui ribbon label">Перетин алгоритмів</div>
-                        <p></p>
-
-                        <p class="inline field">
-                            <input id="methods-mix-factor" type="text" value="0.95">
-
-                    <span class="ui pointing left label">
-                        Коефіцієнт подібності (від 0 до 1)
-                    </span>
-                        </p>
-                    </div>
-                </div>
-
-                <p class="actions">
-                    <button class="ui button"
-                            data-bind=" disable: isDisabled,
-                            css: {disabled: isDisabled}">
-                        ok
-                    </button>
-                </p>
-            </form>
-        </div>
-    </div>
-
-</div>
-
 </body>
 </html>

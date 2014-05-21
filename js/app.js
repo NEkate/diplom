@@ -81,7 +81,7 @@ define([
 	});
 
 	$('#show-settings').click(function () {
-		settingsDialog.dialog('open');
+		goNextContent($('#show-settings'));
 	});
 
 	$('#analyse').submit(function (e) {
@@ -210,7 +210,7 @@ define([
 				predictData = predictList.map(function(object){
 				    return {
 						cell0: object.region,
-						cell1: object.predict
+						cell1: object.predict.toFixed(4)
 					};
 				}),
 				predictColumns = [
@@ -228,7 +228,7 @@ define([
 		}
 		//endregion
 
-		goNextContent($('#show-settings'));
+		goNextContent(this);
 
 		return false;
 	});
@@ -244,7 +244,13 @@ define([
 	}
 
 	function createTable(selector, data, colomns) {
-		$(selector).kendoGrid({
+		var grid = $(selector);
+		if(grid.data('kendoGrid')){
+			grid.data('kendoGrid').destroy();
+			grid.empty();
+		}
+
+		grid.kendoGrid({
 			dataSource: {
 				data: data,
 				pageSize: 10
