@@ -91,7 +91,7 @@ define([
 
 		var i, j;
 
-		//region ===================== rank analyse =====================
+		//region ===================== rank analyse
 
 		if (analyzeView.rang()) {
 
@@ -119,7 +119,7 @@ define([
 		}
 		//endregion
 
-		//region ===================== cluster analyse =====================
+		//region ===================== cluster analyse
 		if (analyzeView.cluster()) {
 
 			var clustersList = getClusterList(analyzeView.method());
@@ -200,7 +200,7 @@ define([
 		}
 		//endregion
 
-		//region ===================== predict =====================
+		//region ===================== predict
 
 		if (analyzeView.predict()){
 			var predictList = predict({
@@ -210,7 +210,9 @@ define([
 				predictData = predictList.map(function(object){
 				    return {
 						cell0: object.region,
-						cell1: object.predict.toFixed(4)
+						cell1: object.movingAveragePredict.toFixed(4),
+						cell2: object.exponentialSmoothingPredict.toFixed(4),
+						cell3: object.predict.toFixed(4)
 					};
 				}),
 				predictColumns = [
@@ -220,6 +222,14 @@ define([
 					},
 					{
 						field: 'cell1',
+						title: 'Середня ковзаюча'
+					},
+					{
+						field: 'cell2',
+						title: 'Експоненційне згладжування'
+					},
+					{
+						field: 'cell3',
 						title: 'Прогнозоване значення'
 					}
 				];
@@ -233,7 +243,7 @@ define([
 		return false;
 	});
 
-	//region ===================== Utils ===================================
+	//region ===================== Utils
 
 	function goNextContent(node) {
 		$(node)

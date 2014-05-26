@@ -18,6 +18,8 @@ define([
 
 			return {
 				region: object.region,
+				exponentialSmoothingPredict: ai,
+				movingAveragePredict: bi,
 				predict: ai * 0.6 + bi * 0.4
 			};
 	    });
