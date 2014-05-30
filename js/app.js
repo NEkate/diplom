@@ -7,7 +7,7 @@ define([
 	'methods/methodMix',
 	'methods/predicts/methodMix',
 	'knockout',
-	'jquery', 'jqueryui', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'
+	'jquery', 'semantic', 'kendo', 'highcharts-export', 'ajax-form'
 ], function (
 	clone,
 	dataNormalization,
@@ -72,13 +72,6 @@ define([
 		$(this.getAttribute('href')).data('chart').exportChart();
 	});
 
-	var settingsDialog = $('#settings-dialog').dialog({
-		width: 700,
-		minHeight: 360,
-		title: "Налаштування для аналізу",
-		autoOpen: false,
-		modal: true
-	});
 
 	$('#show-settings').click(function () {
 		goNextContent($('#show-settings'));
@@ -86,8 +79,6 @@ define([
 
 	$('#analyse').submit(function (e) {
 		e.preventDefault();
-
-		settingsDialog.dialog('close');
 
 		var i, j;
 

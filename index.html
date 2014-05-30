@@ -56,8 +56,8 @@
         <form id="analyse" class="ui fluid form">
             <div class="field"><label><input type="checkbox" name="rang" data-bind="checked: rang"> Необхіден
                 ранговий аналіз</label></div>
-            <div class="field"><label><input type="checkbox" name="range" data-bind="checked: range"> Необхідне
-                інтервальне оцінювання</label></div>
+            <!--<div class="field"><label><input type="checkbox" name="range" data-bind="checked: range"> Необхідне
+                інтервальне оцінювання</label></div>-->
             <div class="field"><label><input type="checkbox" name="predict" data-bind="checked: predict"> Необхідно
                 прогнозування</label></div>
             <div class="field"><label><input type="checkbox" name="cluster" data-bind="checked: cluster"> Необхіден
@@ -71,14 +71,14 @@
                     <i class="dropdown icon"></i>
 
                     <div class="menu">
-                        <div class="item" data-value="closest-neighbours">Метод найблищого сусіда</div>
+                        <div class="item" data-value="closest-neighbours">Ієрархічний метод</div>
                         <div class="item" data-value="k-means">k-means</div>
                         <div class="item" data-value="methods-mix">Перетин алгоритмів</div>
                     </div>
                 </div>
 
                 <div data-bind="css: {visible: isClosestNeighbours()}" class="ui segment method-form">
-                    <div class="ui ribbon label">Метод найблищого сусіда</div>
+                    <div class="ui ribbon label">Ієрархічний метод</div>
                     <p></p>
 
                     <p class="inline field">

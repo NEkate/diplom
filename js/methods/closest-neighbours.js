@@ -1,4 +1,12 @@
-define(['methods/utils/clone-object', 'methods/utils/addIndex', 'methods/utils/correlation-coefficient'], function (clone, addIndex, getCorrelationCoefficient) {
+define([
+	'methods/utils/clone-object',
+	'methods/utils/addIndex',
+	'methods/utils/correlation-coefficient'
+], function (
+	clone,
+	addIndex,
+	getCorrelationCoefficient
+	) {
 
 	return function closestNeighbours(objectList, factor){
 		objectList = clone(objectList, []);
