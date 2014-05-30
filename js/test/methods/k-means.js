@@ -1,4 +1,10 @@
-define(['chai', 'methods/k-means'], function (chai, kMeans) {
+define([
+	'chai',
+	'methods/k-means'
+], function (
+	chai,
+	kMeans
+) {
 
 	var expect = chai.expect;
 

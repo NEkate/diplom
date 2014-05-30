@@ -15,7 +15,7 @@ tests = [
     'methods/closest-neighbours'
     'methods/k-means'
     'methods/methodMix'
-#    'methods/predicts/methodMix'
+    'methods/predict'
 ]
 
 tests = tests.map (test) -> 'test/' + test
