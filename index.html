@@ -56,8 +56,8 @@
         <form id="analyse" class="ui fluid form">
             <div class="field"><label><input type="checkbox" name="rang" data-bind="checked: rang"> Необхіден
                 ранговий аналіз</label></div>
-            <!--<div class="field"><label><input type="checkbox" name="range" data-bind="checked: range"> Необхідне
-                інтервальне оцінювання</label></div>-->
+            <div class="field"><label><input type="checkbox" name="range" data-bind="checked: range"> Необхідне
+                інтервальне оцінювання</label></div>
             <div class="field"><label><input type="checkbox" name="predict" data-bind="checked: predict"> Необхідно
                 прогнозування</label></div>
             <div class="field"><label><input type="checkbox" name="cluster" data-bind="checked: cluster"> Необхіден
@@ -174,7 +174,9 @@
             <h2 class="ui bleak header">Прогнозування</h2>
             <div id="predict-grid"></div>
         </div>
-
+        <p>
+            <button class="ui button">Export to XLSX</button>
+        </p>
 
     </div>
     <!--END-->
